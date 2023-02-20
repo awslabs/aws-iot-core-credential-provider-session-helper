@@ -54,7 +54,9 @@ def ca():
 def httpserver_ssl_context(ca):
     """Create an HTTPS server with the CA certificate."""
     context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-    localhost_cert = ca.issue_cert("localhost", "127.0.0.1", "::1")
+    localhost_cert = ca.issue_cert(
+        "localhost", "127.0.0.1", "::1", common_name="localhost"
+    )
     localhost_cert.configure_cert(context)
     return context
 
@@ -139,8 +141,10 @@ def test_valid_credentials(
             }
         }
     )
-    with pytest.raises(ClientError):
-        session.client("sts").get_caller_identity()
+    # with pytest.raises(ClientError):
+    #     session.client("sts").get_caller_identity()
+    session.client("sts").get_caller_identity()
+    raise AssertionError
 
 
 # def test_invalid_credentials(
