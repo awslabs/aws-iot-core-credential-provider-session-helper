@@ -26,7 +26,7 @@ key_bytes = b"key bytes"
 @pytest.fixture(scope="session")
 def httpserver_listen_address():
     """Return an address for the test HTTP server."""
-    return ("0.0.0.0", 44275)
+    return ("localhost", 7939)
 
 
 @pytest.fixture(scope="session")
@@ -100,7 +100,7 @@ def test_valid_credentials(
     one_hour_later = datetime.datetime.utcnow() + datetime.timedelta(hours=1)
 
     session = IotCoreCredentialProviderSession(
-        endpoint="localhost:44275",
+        endpoint="localhost:7939",
         role_alias="iot_role_alias",
         certificate="tests/assets/client_rsa2048.pem",
         private_key="tests/assets/client_rsa2048.key",
@@ -133,7 +133,7 @@ def test_invalid_credentials(
     for more details.
     """
     session = IotCoreCredentialProviderSession(
-        endpoint="localhost:44275",
+        endpoint="localhost:7939",
         role_alias="iot_role_alias",
         certificate="tests/assets/client_rsa2048.pem",
         private_key="tests/assets/client_rsa2048.key",
