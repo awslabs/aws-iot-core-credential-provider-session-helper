@@ -54,7 +54,7 @@ def ca():
 def httpserver_ssl_context(ca):
     """Create an HTTPS server with the CA certificate."""
     context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-    localhost_cert = ca.issue_cert(server_endpoint)
+    localhost_cert = ca.issue_cert("localhost", "127.0.0.1", "::1")
     localhost_cert.configure_cert(context)
     return context
 
