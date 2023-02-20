@@ -97,7 +97,7 @@ jobs:
         with:
           cond: ${{ matrix.os == 'windows-latest'}}
           if_true: ""
-          if false: "GITHUB_RUNNER=${{ matrix.os }}"
+          if_false: "GITHUB_RUNNER=${{ matrix.os }}"
 
       - name: Run Nox
         run: |
