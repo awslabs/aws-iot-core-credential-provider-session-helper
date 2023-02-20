@@ -6,6 +6,7 @@ SPDX-License-Identifier: Apache-2.0
 These tests focus on testing the session via files or values for certificates and private keys.
 """
 import datetime
+import os
 import ssl
 
 import pytest
@@ -22,11 +23,19 @@ from aws_iot_core_credential_provider_session_helper.iot_core_credential_provide
 cert_bytes = b"cert bytes"
 key_bytes = b"key bytes"
 
+if "GITHUB_RUNNER" in os.environ:
+    if os.environ["GITHUB_RUNNER"] == "ubuntu-latest":  # pragma: no cover
+        # Force IPv6 which is what awscrt will prefer
+        server_endpoint = "::1"
+else:
+    # All others will default to IPv4
+    server_endpoint = "localhost"
+
 
 @pytest.fixture(scope="session")
 def httpserver_listen_address():
     """Return an address for the test HTTP server."""
-    return ("localhost", 7939)
+    return (server_endpoint, 7939)
 
 
 @pytest.fixture(scope="session")
@@ -64,7 +73,7 @@ def test_get_session_with_files() -> None:
 def test_get_session_with_variables() -> None:
     """Create session object with cert/key as variables."""
     session = IotCoreCredentialProviderSession(
-        endpoint="my_endpoint.credentials.iot.us-west-2.amazonaws.com",
+        endpoint="cicd_testing.credentials.iot.us-west-2.amazonaws.com",
         role_alias="iot_role_alias",
         certificate=cert_bytes,
         private_key=key_bytes,
@@ -98,9 +107,13 @@ def test_valid_credentials(
         the awscrt portions in making HTTPS requests.
     """
     one_hour_later = datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+    if server_endpoint == "::1":
+        endpoint = f"[{server_endpoint}]:7939"
+    else:
+        endpoint = f"{server_endpoint}:7939"
 
     session = IotCoreCredentialProviderSession(
-        endpoint="localhost:7939",
+        endpoint=endpoint,
         role_alias="iot_role_alias",
         certificate="tests/assets/client_rsa2048.pem",
         private_key="tests/assets/client_rsa2048.key",
@@ -132,8 +145,12 @@ def test_invalid_credentials(
     This will be any non-200 response such as 400, 403, or 404. See dev_details
     for more details.
     """
+    if server_endpoint == "::1":
+        endpoint = f"[{server_endpoint}]:7939"
+    else:
+        endpoint = f"{server_endpoint}:7939"
     session = IotCoreCredentialProviderSession(
-        endpoint="localhost:7939",
+        endpoint=endpoint,
         role_alias="iot_role_alias",
         certificate="tests/assets/client_rsa2048.pem",
         private_key="tests/assets/client_rsa2048.key",

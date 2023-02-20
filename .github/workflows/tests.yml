@@ -37,7 +37,7 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v3
 
-      - name: Disable IPv6
+      - name: Set env variable t
         if: matrix.os == 'ubuntu-latest'
         run: |
           sudo sysctl -w net.ipv6.conf.all.disable_ipv6=1
@@ -102,7 +102,7 @@ jobs:
 
       - name: Run Nox
         run: |
-          nox --python=${{ matrix.python }}
+          GITHUB_RUNNER=${{ matrix.os }} nox --python=${{ matrix.python }}
 
       - name: Upload coverage data
         if: always() && matrix.session == 'tests'
