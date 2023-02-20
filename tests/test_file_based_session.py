@@ -119,10 +119,8 @@ def test_valid_credentials(
             }
         }
     )
-    # with pytest.raises(ClientError):
-    #     session.client("sts").get_caller_identity()
-    session.client("sts").get_caller_identity()
-    raise AssertionError
+    with pytest.raises(ClientError):
+        session.client("sts").get_caller_identity()
 
 
 def test_invalid_credentials(
