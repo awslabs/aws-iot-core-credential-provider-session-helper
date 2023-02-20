@@ -106,7 +106,7 @@ def test_valid_credentials(
         private_key="tests/assets/client_rsa2048.key",
         thing_name="my_iot_thing_name",
         ca=ca.cert_pem.bytes(),
-        awscrt_log_level=LogLevel.Info,
+        awscrt_log_level=LogLevel.Debug,
     ).get_session()
     httpserver.expect_request(
         "/role-aliases/iot_role_alias/credentials", method="GET"
