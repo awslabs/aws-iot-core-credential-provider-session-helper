@@ -92,9 +92,16 @@ jobs:
           restore-keys: |
             ${{ steps.pre-commit-cache.outputs.result }}-
 
+      - uses: haya14busa/action-cond@v1
+        id: condval
+        with:
+          cond: ${{ matrix.os == 'windows-latest'}}
+          if_true: ""
+          if false: "GITHUB_RUNNER=${{ matrix.os }}"
+
       - name: Run Nox
         run: |
-          GITHUB_RUNNER=${{ matrix.os }} nox --python=${{ matrix.python }}
+          ${{ steps.condval.outputs.value }} nox --python=${{ matrix.python }}
 
       - name: Upload coverage data
         if: always() && matrix.session == 'tests'
