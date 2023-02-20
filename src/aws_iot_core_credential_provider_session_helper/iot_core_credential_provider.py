@@ -346,6 +346,8 @@ class IotCoreCredentialProviderSession:
         )
         if ca:
             tls_ctx_opt.override_default_trust_store(ca)
+        # FIX - remove when done testing
+        tls_ctx_opt.verify_peer = False
         tls_ctx = ClientTlsContext(tls_ctx_opt)
         tls_conn_opt: TlsConnectionOptions = cast(
             TlsConnectionOptions, tls_ctx.new_connection_options()
