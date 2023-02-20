@@ -80,7 +80,7 @@ def test_session_with_invalid_credentials() -> None:
     """
     with pytest.raises(ValueError, match="Error completing mTLS connection"):
         IotCoreCredentialProviderSession(
-            endpoint="my_endpoint.credentials.iot.us-west-2.amazonaws.com",
+            endpoint="cicd_testing.credentials.iot.us-west-2.amazonaws.com",
             role_alias="iot_role_alias",
             certificate="tests/assets/client_rsa2048.pem",
             private_key="tests/assets/client_rsa2048.key",
@@ -106,6 +106,7 @@ def test_valid_credentials(
         private_key="tests/assets/client_rsa2048.key",
         thing_name="my_iot_thing_name",
         ca=ca.cert_pem.bytes(),
+        awscrt_log_level=LogLevel.Info,
     ).get_session()
     httpserver.expect_request(
         "/role-aliases/iot_role_alias/credentials", method="GET"
