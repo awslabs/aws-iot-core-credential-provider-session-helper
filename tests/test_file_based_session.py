@@ -26,7 +26,7 @@ key_bytes = b"key bytes"
 @pytest.fixture(scope="session")
 def httpserver_listen_address():
     """Return an address for the test HTTP server."""
-    return ("127.0.0.1", 8888)
+    return ("localhost", 8888)
 
 
 @pytest.fixture(scope="session")
@@ -39,7 +39,7 @@ def ca():
 def httpserver_ssl_context(ca):
     """Create an HTTPS server with the CA certificate."""
     context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-    localhost_cert = ca.issue_cert("127.0.0.1")
+    localhost_cert = ca.issue_cert("localhost")
     localhost_cert.configure_cert(context)
     return context
 
@@ -100,13 +100,12 @@ def test_valid_credentials(
     one_hour_later = datetime.datetime.utcnow() + datetime.timedelta(hours=1)
 
     session = IotCoreCredentialProviderSession(
-        endpoint="127.0.0.1:8888",
+        endpoint="localhost:8888",
         role_alias="iot_role_alias",
         certificate="tests/assets/client_rsa2048.pem",
         private_key="tests/assets/client_rsa2048.key",
         thing_name="my_iot_thing_name",
         ca=ca.cert_pem.bytes(),
-        awscrt_log_level=LogLevel.Debug,
     ).get_session()
     httpserver.expect_request(
         "/role-aliases/iot_role_alias/credentials", method="GET"
@@ -134,7 +133,7 @@ def test_invalid_credentials(
     for more details.
     """
     session = IotCoreCredentialProviderSession(
-        endpoint="127.0.0.1:8888",
+        endpoint="localhost:8888",
         role_alias="iot_role_alias",
         certificate="tests/assets/client_rsa2048.pem",
         private_key="tests/assets/client_rsa2048.key",
