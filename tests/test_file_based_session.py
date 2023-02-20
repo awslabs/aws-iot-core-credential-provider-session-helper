@@ -44,48 +44,48 @@ def httpserver_ssl_context(ca):
     return context
 
 
-# def test_get_session_with_files() -> None:
-#     """Verify session can be created, now with logging!."""
-#     session = IotCoreCredentialProviderSession(
-#         endpoint="my_endpoint.credentials.iot.us-west-2.amazonaws.com",
-#         role_alias="iot_role_alias",
-#         certificate="tests/assets/client_rsa2048.pem",
-#         private_key="tests/assets/client_rsa2048.key",
-#         thing_name="my_iot_thing_name",
-#         awscrt_log_level=LogLevel.Fatal,
-#     )
-#     assert session is not None
-#     session_default = session.get_session()
-#     assert session_default is not None
-#     session_region = session.get_session(region_name="us-west2")
-#     assert session_region is not None
+def test_get_session_with_files() -> None:
+    """Verify session can be created, now with logging!."""
+    session = IotCoreCredentialProviderSession(
+        endpoint="my_endpoint.credentials.iot.us-west-2.amazonaws.com",
+        role_alias="iot_role_alias",
+        certificate="tests/assets/client_rsa2048.pem",
+        private_key="tests/assets/client_rsa2048.key",
+        thing_name="my_iot_thing_name",
+        awscrt_log_level=LogLevel.Fatal,
+    )
+    assert session is not None
+    session_default = session.get_session()
+    assert session_default is not None
+    session_region = session.get_session(region_name="us-west2")
+    assert session_region is not None
 
 
-# def test_get_session_with_variables() -> None:
-#     """Create session object with cert/key as variables."""
-#     session = IotCoreCredentialProviderSession(
-#         endpoint="my_endpoint.credentials.iot.us-west-2.amazonaws.com",
-#         role_alias="iot_role_alias",
-#         certificate=cert_bytes,
-#         private_key=key_bytes,
-#         thing_name="my_iot_thing_name",
-#     )
-#     assert session is not None
+def test_get_session_with_variables() -> None:
+    """Create session object with cert/key as variables."""
+    session = IotCoreCredentialProviderSession(
+        endpoint="my_endpoint.credentials.iot.us-west-2.amazonaws.com",
+        role_alias="iot_role_alias",
+        certificate=cert_bytes,
+        private_key=key_bytes,
+        thing_name="my_iot_thing_name",
+    )
+    assert session is not None
 
 
-# def test_session_with_invalid_credentials() -> None:
-#     """Verify IoT credential provider endpoint can be hit - invalid credentials.
+def test_session_with_invalid_credentials() -> None:
+    """Verify IoT credential provider endpoint can be hit - invalid credentials.
 
-#     Expectation: TLS session will not complete.
-#     """
-#     with pytest.raises(ValueError, match="Error completing mTLS connection"):
-#         IotCoreCredentialProviderSession(
-#             endpoint="cicd_testing.credentials.iot.us-west-2.amazonaws.com",
-#             role_alias="iot_role_alias",
-#             certificate="tests/assets/client_rsa2048.pem",
-#             private_key="tests/assets/client_rsa2048.key",
-#             thing_name="my_iot_thing_name",
-#         ).get_session().client("sts").get_caller_identity()
+    Expectation: TLS session will not complete.
+    """
+    with pytest.raises(ValueError, match="Error completing mTLS connection"):
+        IotCoreCredentialProviderSession(
+            endpoint="cicd_testing.credentials.iot.us-west-2.amazonaws.com",
+            role_alias="iot_role_alias",
+            certificate="tests/assets/client_rsa2048.pem",
+            private_key="tests/assets/client_rsa2048.key",
+            thing_name="my_iot_thing_name",
+        ).get_session().client("sts").get_caller_identity()
 
 
 def test_valid_credentials(
@@ -106,7 +106,6 @@ def test_valid_credentials(
         private_key="tests/assets/client_rsa2048.key",
         thing_name="my_iot_thing_name",
         ca=ca.cert_pem.bytes(),
-        awscrt_log_level=LogLevel.Trace,
     ).get_session()
     httpserver.expect_request(
         "/role-aliases/iot_role_alias/credentials", method="GET"
@@ -120,29 +119,31 @@ def test_valid_credentials(
             }
         }
     )
-    with pytest.raises(ClientError):
+    # with pytest.raises(ClientError):
+    #     session.client("sts").get_caller_identity()
+    session.client("sts").get_caller_identity()
+    raise AssertionError
+
+
+def test_invalid_credentials(
+    httpserver: pytest_httpserver.HTTPServer,
+    ca: trustme.CA,
+) -> None:
+    """Test call to localhost where response is invalid.
+
+    This will be any non-200 response such as 400, 403, or 404. See dev_details
+    for more details.
+    """
+    session = IotCoreCredentialProviderSession(
+        endpoint="localhost:7939",
+        role_alias="iot_role_alias",
+        certificate="tests/assets/client_rsa2048.pem",
+        private_key="tests/assets/client_rsa2048.key",
+        thing_name="my_iot_thing_name",
+        ca=ca.cert_pem.bytes(),
+    ).get_session()
+    httpserver.expect_request(
+        "/role-aliases/iot_role_alias/credentials", method="GET"
+    ).respond_with_json({"message": "Role alias does not exist"}, status=404)
+    with pytest.raises(ValueError):
         session.client("sts").get_caller_identity()
-
-
-# def test_invalid_credentials(
-#     httpserver: pytest_httpserver.HTTPServer,
-#     ca: trustme.CA,
-# ) -> None:
-#     """Test call to localhost where response is invalid.
-
-#     This will be any non-200 response such as 400, 403, or 404. See dev_details
-#     for more details.
-#     """
-#     session = IotCoreCredentialProviderSession(
-#         endpoint="localhost:7939",
-#         role_alias="iot_role_alias",
-#         certificate="tests/assets/client_rsa2048.pem",
-#         private_key="tests/assets/client_rsa2048.key",
-#         thing_name="my_iot_thing_name",
-#         ca=ca.cert_pem.bytes(),
-#     ).get_session()
-#     httpserver.expect_request(
-#         "/role-aliases/iot_role_alias/credentials", method="GET"
-#     ).respond_with_json({"message": "Role alias does not exist"}, status=404)
-#     with pytest.raises(ValueError):
-#         session.client("sts").get_caller_identity()
