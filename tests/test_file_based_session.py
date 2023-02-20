@@ -20,6 +20,10 @@ from aws_iot_core_credential_provider_session_helper.iot_core_credential_provide
 )
 
 
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+
 cert_bytes = b"cert bytes"
 key_bytes = b"key bytes"
 
@@ -50,7 +54,7 @@ def ca():
 def httpserver_ssl_context(ca):
     """Create an HTTPS server with the CA certificate."""
     context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-    localhost_cert = ca.issue_cert("localhost")
+    localhost_cert = ca.issue_cert(server_endpoint)
     localhost_cert.configure_cert(context)
     return context
 
