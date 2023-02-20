@@ -42,6 +42,10 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
 
+      - name: Firewall status
+        run: |
+          sudo ufw status
+
       - name: Upgrade pip
         run: |
           pip install --constraint=.github/workflows/constraints.txt pip
