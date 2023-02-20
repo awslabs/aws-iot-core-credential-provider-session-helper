@@ -180,6 +180,7 @@ def tests(session: Session) -> None:
         "coverage-conditional-plugin",
     )
     try:
+        session.run("pip", "list")
         session.run("coverage", "run", "--parallel", "-m", "pytest", *session.posargs)
     finally:
         if session.interactive:
