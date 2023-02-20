@@ -1,0 +1,18 @@
+{
+    "editor.tabSize": 4,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.detectIndentation": false,
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.python"
+    },
+    "cSpell.words": [
+        "awsrequest",
+        "httpsession",
+        "mtls",
+        "pkcs",
+        "Refreshable",
+        "softhsm",
+        "thingname",
+        "trustme"
+    ]
+}
