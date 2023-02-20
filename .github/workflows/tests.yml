@@ -42,10 +42,6 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
 
-      - name: Network Details
-        run: |
-          netstat -na
-
       - name: Upgrade pip
         run: |
           pip install --constraint=.github/workflows/constraints.txt pip

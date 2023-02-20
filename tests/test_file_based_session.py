@@ -26,7 +26,7 @@ key_bytes = b"key bytes"
 @pytest.fixture(scope="session")
 def httpserver_listen_address():
     """Return an address for the test HTTP server."""
-    return ("localhost", 44275)
+    return ("0.0.0.0", 44275)
 
 
 @pytest.fixture(scope="session")
