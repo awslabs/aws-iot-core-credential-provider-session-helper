@@ -77,14 +77,38 @@ class AwscrtResponse:
 
 
 class IotCoreCredentialProviderSession:
-    """Session object for IotCoreCredentialProvider.
+    """Session object using the AWS IoT Core Credential Provider.
 
-    Creates an object ready to create boto3 session object that requests
-    credentials from the AWS IoT Core Credential Provider. After creation,
-    a call to ``get_session()`` will return a boto3 session object. That session
-    object will then request credentials as needed when boto3 client calls are
-    issued. The boto3 session object will automatically refresh credentials as
-    they expire.
+    Creates an object from credentials used to authenticated against the
+    AWS IoT Core Credential Provider. After creation, a call to ``get_session()``
+    will return a Boto3 session object. That session object will then request
+    credentials as needed when Boto3 client calls are issued. The Boto3 session
+    object will automatically refresh credentials as they expire.
+
+    Args:
+        endpoint: Fully-qualified domain name of the AWS IoT Credential
+            Provider endpoint.
+        role_alias: IoT Role Alias to use for obtaining the attached IAM Role.
+        thing_name: IoT Thing Name attached to the IoT Policy which grants access to
+            IoT Role Alias.
+        certificate: X.509 certificate registered with AWS IoT Core in PKCS#7
+            armored format (e.g., PEM). It can be either a path to the certificate
+            on the file system (``str``) *or* the certificate in byte format (``bytes``).
+        private_key: Private key associated with the X.509 certificate. It can
+            either be a path to the private key on the file system (``str``) *or* the
+            private key is byte format (``bytes``).
+        pkcs11: Configuration to use a local PKCS#11 interface for private key operations.
+        ca: The certificate authority used to validate the AWS IoT Core credential
+            provider endpoint. It can either be a path to the certificate authority
+            on the file system (``str)`` *or* the certificate authority in byte
+            format (``bytes``). Defaults to ``None`` which uses the operating systems default
+            trust store.
+        awscrt_log_level: Log level for ``awscrt`` operations.
+        verify_peer: When set to ``True``, will verify the server certificate against the
+            endpoint. Only set to ``False`` for testing purposes. Defaults to ``True``.
+
+    Raises:
+        ValueError: Only if ``private_key`` **or** ``pkcs11`` argument are not provided.
     """
 
     def __init__(
@@ -169,7 +193,7 @@ class IotCoreCredentialProviderSession:
         # ] = ca  # used in testing or to override the default CA trust store
 
     def get_session(self, **kwargs) -> Session:
-        """Create a boto3 session object with credential refresh using AWS IoT Credential Provider.
+        """Create a Boto3 session object with credential refresh using AWS IoT Credential Provider.
 
         Returns:
            Boto3 session object tied to IoT Credential Provider for obtaining credentials.
@@ -241,7 +265,7 @@ class IotCoreCredentialProviderSession:
         Returns:
             IAMBotocoreCredentials: Credentials acquired from IoT Credential Provider.
 
-            The credentials are returned in a format consumable by botocore to vend to boto3 sessions:
+            The credentials are returned in a format consumable by botocore to vend to Boto3 sessions:
 
                 {
                     "access_key": accessKeyId,

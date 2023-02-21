@@ -15,14 +15,14 @@
 [pre-commit]: https://github.com/pre-commit/pre-commit
 [black]: https://github.com/psf/black
 
-This package provides an easy way to create a **refreshable** boto3 Session using [AWS IoT credential provider](https://docs.aws.amazon.com/iot/latest/developerguide/authorizing-direct-aws.html).
+This package provides an easy way to create a **refreshable** Boto3 Session using [AWS IoT Core credential provider](https://docs.aws.amazon.com/iot/latest/developerguide/authorizing-direct-aws.html).
 
 ## Features
 
-- Automatic refresh of boto3 credentials through requests to the AWS IoT credential provider. No need to manage or maintain refresh times.
+- Automatic refresh of [Boto3 credentials](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html) through requests to the AWS IoT Core credential provider. No need to manage or maintain refresh times.
 - Uses the underlying [AWS CRT Python](https://github.com/awslabs/aws-crt-python) bindings for querying the credential provider instead of the Python standard library. This provides support for both certificate and private keys as files _or_ as environment variables.
-- **Future** - Extensible to using other TLS methods such as PKCS#11 hardware security modules.
-- Four function calls to create a helper, boto3 session, boto3 client, and then API calls.
+- Extensible to using other TLS methods such as PKCS#11 hardware security modules (see Advanced section).
+- Only requires four function calls to create a session helper, Boto3 session, Boto3 client, and then client API calls.
 
 ## Requirements
 
@@ -43,28 +43,25 @@ Prior to use, ensure all cloud-side resources for IAM and AWS IoT Core have been
 ```python
 import aws_iot_core_credential_provider_session_helper as iotcp_session
 
-# Create helper object (no calls to AWS yet)
-helper = iotcp_session.IotCoreCredentialProviderSession(
+# Create boto3 session object
+boto3_session = iotcp_session.IotCoreCredentialProviderSession(
     endpoint="your_endpoint.credentials.iot.us-west-2.amazonaws.com",
     role_alias="your_aws_iot_role_alias_name",
     certificate="iot_thing.pem",
     private_key="iot_thing.pem.key",
     thing_name="iot_thing",
-)
+).get_session()
 
-# Create boto3 session object (no calls to AWS yet).
-boto3_session = helper.get_session()
+# Use in regular Boto3 chained operations, such as returning caller identity
+print(boto3_session.client("sts").get_caller_identity())
+{'UserId': 'AROA...F3D:4686c...0a0d', 'Account': '1234567890', 'Arn': 'arn:aws:sts::1234567890:assumed-role/iam_role_name/4686c...0a0d', 'ResponseMetadata': {'RequestId': 'cc04...10bc', 'HTTPStatusCode': 200, 'HTTPHeaders': {'x-amzn-requestid': 'cc04...10bc', 'content-type': 'text/xml', 'content-length': '554', 'date': 'Tue, 21 Feb 2023 21:18:23 GMT'}, 'RetryAttempts': 0}}
 
-# Create an AWS IoT  service client from boto3 session (still no calls to AWS yet)
+# Or by creating a service client and making API calls
 iot = boto3_session.client("iot")
-
-# Make the first AWS IoT API call. Here is where temporary credentials will be obtained
-# and mapped to the session object. The same credentials will be used for all additional
-# API calls until they need to be refreshed which will happen automatically.
 result = iot.list_things()
 ```
 
-Please see the [package documentation] for more details and advanced use.
+Please see the [package documentation](https://awslabs.github.io/aws-iot-core-credential-provider-session-helper) for more details and advanced use.
 
 ## Contributing
 
@@ -74,12 +71,11 @@ To learn more, see the [Contributor Guide].
 ## License
 
 Distributed under the terms of the [Apache 2.0 license][license].
-Details on third party packages used by this package can be found [here][third-party].
+Details on third party packages used by this package can be found [here](https://github.com/awslabs/aws-iot-core-credential-provider-session-helper/blob/main/THIRD-PARTY-LICENSES.txt).
 
 ## Issues
 
-If you encounter any problems,
-please [file an issue] along with a detailed description.
+If you encounter any problems, please [file an issue](https://github.com/awslabs/aws-iot-core-credential-provider-session-helper/issues/new) along with a detailed description.
 
 ## Credits
 
@@ -94,5 +90,6 @@ This project template was generated from a fork of [@cjolowicz]'s [Hypermodern P
 
 [license]: https://github.com/awslabs/aws-iot-core-credential-provider-session-helper/blob/main/LICENSE
 [contributor guide]: https://github.com/awslabs/aws-iot-core-credential-provider-session-helper/blob/main/CONTRIBUTING.md
-[third-party]: https://github.com/awslabs/aws-iot-core-credential-provider-session-helper/blob/main/THIRD-PARTY-LICENSES.txt
-[package-documentation]: https://FQDN_to_doc_site
+[third party]: https://github.com/awslabs/aws-iot-core-credential-provider-session-helper/blob/main/THIRD-PARTY-LICENSES.txt
+[package documentation]: https://awslabs.github.io/aws-iot-core-credential-provider-session-helper
+[file an issue]: https://github.com/awslabs/aws-iot-core-credential-provider-session-helper/issues/new
