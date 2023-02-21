@@ -205,14 +205,14 @@
 <p><a class="reference external" href="https://github.com/awslabs/aws-iot-core-credential-provider-session-helper/actions?workflow=Tests"><img alt="Tests" src="https://github.com/awslabs/aws-iot-core-credential-provider-session-helper/workflows/Tests/badge.svg" /></a></p>
 <p><a class="reference external" href="https://github.com/pre-commit/pre-commit"><img alt="pre-commit" src="https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&amp;logoColor=white" /></a>
 <a class="reference external" href="https://github.com/psf/black"><img alt="Black" src="https://img.shields.io/badge/code%20style-black-000000.svg" /></a></p>
-<p>This package provides an easy way to create a <strong>refreshable</strong> boto3 Session using <a class="reference external" href="https://docs.aws.amazon.com/iot/latest/developerguide/authorizing-direct-aws.html">AWS IoT credential provider</a>.</p>
+<p>This package provides an easy way to create a <strong>refreshable</strong> Boto3 Session using <a class="reference external" href="https://docs.aws.amazon.com/iot/latest/developerguide/authorizing-direct-aws.html">AWS IoT Core credential provider</a>.</p>
 <section id="features">
 <h2>Features<a class="headerlink" href="#features" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p>Automatic refresh of boto3 credentials through requests to the AWS IoT credential provider. No need to manage or maintain refresh times.</p></li>
+<li><p>Automatic refresh of <a class="reference external" href="https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html">Boto3 credentials</a> through requests to the AWS IoT Core credential provider. No need to manage or maintain refresh times.</p></li>
 <li><p>Uses the underlying <a class="reference external" href="https://github.com/awslabs/aws-crt-python">AWS CRT Python</a> bindings for querying the credential provider instead of the Python standard library. This provides support for both certificate and private keys as files <em>or</em> as environment variables.</p></li>
-<li><p><strong>Future</strong> - Extensible to using other TLS methods such as PKCS#11 hardware security modules.</p></li>
-<li><p>Four function calls to create a helper, boto3 session, boto3 client, and then API calls.</p></li>
+<li><p>Extensible to using other TLS methods such as PKCS#11 hardware security modules (see Advanced section).</p></li>
+<li><p>Only requires four function calls to create a session helper, Boto3 session, Boto3 client, and then client API calls.</p></li>
 </ul>
 </section>
 <section id="requirements">
@@ -233,28 +233,25 @@
 <p>Prior to use, ensure all cloud-side resources for IAM and AWS IoT Core have been properly created and configured. Then, with the AWS IoT registered X.509 certificate and corresponding private key (e.g., <code class="docutils literal notranslate"><span class="pre">iot_thing.pem</span></code> and <code class="docutils literal notranslate"><span class="pre">iot_thing.pem.key</span></code>), you can create and use the helper as follows:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">aws_iot_core_credential_provider_session_helper</span> <span class="k">as</span> <span class="nn">iotcp_session</span>
 
-<span class="c1"># Create helper object (no calls to AWS yet)</span>
-<span class="n">helper</span> <span class="o">=</span> <span class="n">iotcp_session</span><span class="o">.</span><span class="n">IotCoreCredentialProviderSession</span><span class="p">(</span>
+<span class="c1"># Create boto3 session object</span>
+<span class="n">boto3_session</span> <span class="o">=</span> <span class="n">iotcp_session</span><span class="o">.</span><span class="n">IotCoreCredentialProviderSession</span><span class="p">(</span>
     <span class="n">endpoint</span><span class="o">=</span><span class="s2">&quot;your_endpoint.credentials.iot.us-west-2.amazonaws.com&quot;</span><span class="p">,</span>
     <span class="n">role_alias</span><span class="o">=</span><span class="s2">&quot;your_aws_iot_role_alias_name&quot;</span><span class="p">,</span>
     <span class="n">certificate</span><span class="o">=</span><span class="s2">&quot;iot_thing.pem&quot;</span><span class="p">,</span>
     <span class="n">private_key</span><span class="o">=</span><span class="s2">&quot;iot_thing.pem.key&quot;</span><span class="p">,</span>
     <span class="n">thing_name</span><span class="o">=</span><span class="s2">&quot;iot_thing&quot;</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="p">)</span><span class="o">.</span><span class="n">get_session</span><span class="p">()</span>
 
-<span class="c1"># Create boto3 session object (no calls to AWS yet).</span>
-<span class="n">boto3_session</span> <span class="o">=</span> <span class="n">helper</span><span class="o">.</span><span class="n">get_session</span><span class="p">()</span>
+<span class="c1"># Use in regular Boto3 chained operations, such as returning caller identity</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">boto3_session</span><span class="o">.</span><span class="n">client</span><span class="p">(</span><span class="s2">&quot;sts&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get_caller_identity</span><span class="p">())</span>
+<span class="p">{</span><span class="s1">&#39;UserId&#39;</span><span class="p">:</span> <span class="s1">&#39;AROA...F3D:4686c...0a0d&#39;</span><span class="p">,</span> <span class="s1">&#39;Account&#39;</span><span class="p">:</span> <span class="s1">&#39;1234567890&#39;</span><span class="p">,</span> <span class="s1">&#39;Arn&#39;</span><span class="p">:</span> <span class="s1">&#39;arn:aws:sts::1234567890:assumed-role/iam_role_name/4686c...0a0d&#39;</span><span class="p">,</span> <span class="s1">&#39;ResponseMetadata&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;RequestId&#39;</span><span class="p">:</span> <span class="s1">&#39;cc04...10bc&#39;</span><span class="p">,</span> <span class="s1">&#39;HTTPStatusCode&#39;</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span> <span class="s1">&#39;HTTPHeaders&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;x-amzn-requestid&#39;</span><span class="p">:</span> <span class="s1">&#39;cc04...10bc&#39;</span><span class="p">,</span> <span class="s1">&#39;content-type&#39;</span><span class="p">:</span> <span class="s1">&#39;text/xml&#39;</span><span class="p">,</span> <span class="s1">&#39;content-length&#39;</span><span class="p">:</span> <span class="s1">&#39;554&#39;</span><span class="p">,</span> <span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="s1">&#39;Tue, 21 Feb 2023 21:18:23 GMT&#39;</span><span class="p">},</span> <span class="s1">&#39;RetryAttempts&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}}</span>
 
-<span class="c1"># Create an AWS IoT  service client from boto3 session (still no calls to AWS yet)</span>
+<span class="c1"># Or by creating a service client and making API calls</span>
 <span class="n">iot</span> <span class="o">=</span> <span class="n">boto3_session</span><span class="o">.</span><span class="n">client</span><span class="p">(</span><span class="s2">&quot;iot&quot;</span><span class="p">)</span>
-
-<span class="c1"># Make the first AWS IoT API call. Here is where temporary credentials will be obtained</span>
-<span class="c1"># and mapped to the session object. The same credentials will be used for all additional</span>
-<span class="c1"># API calls until they need to be refreshed which will happen automatically.</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">iot</span><span class="o">.</span><span class="n">list_things</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Please see the [package documentation] for more details and advanced use.</p>
+<p>Please see the <a class="reference external" href="https://awslabs.github.io/aws-iot-core-credential-provider-session-helper">package documentation</a> for more details and advanced use.</p>
 </section>
 <section id="contributing">
 <h2>Contributing<a class="headerlink" href="#contributing" title="Permalink to this heading">#</a></h2>
@@ -264,12 +261,11 @@ To learn more, see the <a class="reference internal" href="contributing.html"><s
 <section id="license">
 <h2>License<a class="headerlink" href="#license" title="Permalink to this heading">#</a></h2>
 <p>Distributed under the terms of the <a class="reference internal" href="license.html"><span class="doc std std-doc">Apache 2.0 license</span></a>.
-Details on third party packages used by this package can be found [here][third-party].</p>
+Details on third party packages used by this package can be found <a class="reference external" href="https://github.com/awslabs/aws-iot-core-credential-provider-session-helper/blob/main/THIRD-PARTY-LICENSES.txt">here</a>.</p>
 </section>
 <section id="issues">
 <h2>Issues<a class="headerlink" href="#issues" title="Permalink to this heading">#</a></h2>
-<p>If you encounter any problems,
-please [file an issue] along with a detailed description.</p>
+<p>If you encounter any problems, please <a class="reference external" href="https://github.com/awslabs/aws-iot-core-credential-provider-session-helper/issues/new">file an issue</a> along with a detailed description.</p>
 </section>
 <section id="credits">
 <h2>Credits<a class="headerlink" href="#credits" title="Permalink to this heading">#</a></h2>

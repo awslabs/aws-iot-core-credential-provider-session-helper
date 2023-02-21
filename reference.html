@@ -212,17 +212,45 @@ SPDX-License-Identifier: Apache-2.0</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="aws_iot_core_credential_provider_session_helper.IotCoreCredentialProviderSession">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aws_iot_core_credential_provider_session_helper.</span></span><span class="sig-name descname"><span class="pre">IotCoreCredentialProviderSession</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endpoint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">role_alias</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thing_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">certificate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">private_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pkcs11</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#aws_iot_core_credential_provider_session_helper.Pkcs11Config" title="aws_iot_core_credential_provider_session_helper.iot_core_credential_provider.Pkcs11Config"><span class="pre">aws_iot_core_credential_provider_session_helper.iot_core_credential_provider.Pkcs11Config</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ca</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">awscrt_log_level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">awscrt.io.LogLevel</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verify_peer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aws_iot_core_credential_provider_session_helper.IotCoreCredentialProviderSession" title="Permalink to this definition">#</a></dt>
-<dd><p>Session object for IotCoreCredentialProvider.</p>
-<p>Creates an object ready to create boto3 session object that requests
-credentials from the AWS IoT Core Credential Provider. After creation,
-a call to <code class="docutils literal notranslate"><span class="pre">get_session()</span></code> will return a boto3 session object. That session
-object will then request credentials as needed when boto3 client calls are
-issued. The boto3 session object will automatically refresh credentials as
-they expire.</p>
+<dd><p>Session object using the AWS IoT Core Credential Provider.</p>
+<p>Creates an object from credentials used to authenticated against the
+AWS IoT Core Credential Provider. After creation, a call to <code class="docutils literal notranslate"><span class="pre">get_session()</span></code>
+will return a Boto3 session object. That session object will then request
+credentials as needed when Boto3 client calls are issued. The Boto3 session
+object will automatically refresh credentials as they expire.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>endpoint</strong> – Fully-qualified domain name of the AWS IoT Credential
+Provider endpoint.</p></li>
+<li><p><strong>role_alias</strong> – IoT Role Alias to use for obtaining the attached IAM Role.</p></li>
+<li><p><strong>thing_name</strong> – IoT Thing Name attached to the IoT Policy which grants access to
+IoT Role Alias.</p></li>
+<li><p><strong>certificate</strong> – X.509 certificate registered with AWS IoT Core in PKCS#7
+armored format (e.g., PEM). It can be either a path to the certificate
+on the file system (<code class="docutils literal notranslate"><span class="pre">str</span></code>) <em>or</em> the certificate in byte format (<code class="docutils literal notranslate"><span class="pre">bytes</span></code>).</p></li>
+<li><p><strong>private_key</strong> – Private key associated with the X.509 certificate. It can
+either be a path to the private key on the file system (<code class="docutils literal notranslate"><span class="pre">str</span></code>) <em>or</em> the
+private key is byte format (<code class="docutils literal notranslate"><span class="pre">bytes</span></code>).</p></li>
+<li><p><strong>pkcs11</strong> – Configuration to use a local PKCS#11 interface for private key operations.</p></li>
+<li><p><strong>ca</strong> – The certificate authority used to validate the AWS IoT Core credential
+provider endpoint. It can either be a path to the certificate authority
+on the file system (<code class="docutils literal notranslate"><span class="pre">str)</span></code> <em>or</em> the certificate authority in byte
+format (<code class="docutils literal notranslate"><span class="pre">bytes</span></code>). Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code> which uses the operating systems default
+trust store.</p></li>
+<li><p><strong>awscrt_log_level</strong> – Log level for <code class="docutils literal notranslate"><span class="pre">awscrt</span></code> operations.</p></li>
+<li><p><strong>verify_peer</strong> – When set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, will verify the server certificate against the
+endpoint. Only set to <code class="docutils literal notranslate"><span class="pre">False</span></code> for testing purposes. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – Only if <code class="docutils literal notranslate"><span class="pre">private_key</span></code> <strong>or</strong> <code class="docutils literal notranslate"><span class="pre">pkcs11</span></code> argument are not provided.</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="aws_iot_core_credential_provider_session_helper.IotCoreCredentialProviderSession.get_session">
 <span class="sig-name descname"><span class="pre">get_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Session</span></span></span><a class="headerlink" href="#aws_iot_core_credential_provider_session_helper.IotCoreCredentialProviderSession.get_session" title="Permalink to this definition">#</a></dt>
-<dd><p>Create a boto3 session object with credential refresh using AWS IoT Credential Provider.</p>
+<dd><p>Create a Boto3 session object with credential refresh using AWS IoT Credential Provider.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Boto3 session object tied to IoT Credential Provider for obtaining credentials.</p>
