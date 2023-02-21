@@ -97,6 +97,7 @@ class IotCoreCredentialProviderSession:
         pkcs11: Pkcs11Config | None = None,
         ca: bytes | None = None,
         awscrt_log_level: LogLevel | None = None,
+        verify_peer: bool = True,
     ) -> None:
         """Initialize object with AWS IoT Credential Provider details.
 
@@ -119,13 +120,17 @@ class IotCoreCredentialProviderSession:
                 on the file system (str) _or_ the certificate authority in byte format (bytes).
                 Defaults to None.
             awscrt_log_level: Log level for awscrt operations.
+            verify_peer: When true, will verify the server certificate against the endpoint.
+                Only set to false for testing purposes.
 
         Raises:
             ValueError: Only ``private_key`` __or__ ``pkcs11`` argument are provided.
         """
         # Set logging level for awscrt if provided, otherwise default of no logging, just assertions
-        if awscrt_log_level:
+        if awscrt_log_level is not None:
             init_logging(log_level=awscrt_log_level, file_name="stdout")
+        else:
+            pass
 
         self._endpoint: str = endpoint
         self._role_alias: str = role_alias
@@ -157,6 +162,7 @@ class IotCoreCredentialProviderSession:
             self._client_connection_type = "mtls_pkcs11"
 
         self.__ca = ca if ca else None
+        self.__verify_peer = verify_peer
 
         # self.__ca: Optional[
         #     bytes
@@ -190,7 +196,7 @@ class IotCoreCredentialProviderSession:
             Refreshable credentials that will be used by botocore.
         """
         return DeferredRefreshableCredentials(
-            method="custom-iot-credential-provider",
+            method="custom-iot-core-credential-provider",
             refresh_using=self.__get_credentials,
         )
 
@@ -288,6 +294,7 @@ class IotCoreCredentialProviderSession:
                 private_key=self.__private_key,
                 port=port,
                 ca=self.__ca,
+                verify_peer=self.__verify_peer,
             )
         elif self._client_connection_type == "mtls_pkcs11":  # pragma: os-not-linux
             connection = self._mtls_pkcs11_client_connection(
@@ -296,6 +303,7 @@ class IotCoreCredentialProviderSession:
                 port=port,
                 ca=self.__ca,
                 pkcs11=self._pkcs11,
+                verify_peer=self.__verify_peer,
             )
         stream = connection.request(request, response.on_response, response.on_body)
         stream.activate()
@@ -319,19 +327,22 @@ class IotCoreCredentialProviderSession:
         certificate: bytes,
         private_key: bytes,
         port: int,
+        verify_peer: bool = True,
         ca: bytes | None = None,
     ) -> HttpClientConnection:
         """HTTP client connection using mutual TLS.
 
         Args:
             url: Full URL to obtain fully-qualified hostname
-            certificate: Certificate in PKCS#7 armored (PEM) byte format
-            private_key: Private key in bytes
+            certificate: Certificate in PKCS#7 armored (PEM) byte format.
+            private_key: Private key in bytes.
             port: Port number to use for HTTPS connection. Default is 443.
+            verify_peer: If set to True will verify server certificate against endpoint.
             ca: Certificate authority in bytes. Default is None.
 
+
         Returns:
-            HttpClientConnection: HTTP client connection
+            HttpClientConnection: HTTP client connection.
 
         Raises:
             ValueError: If the mTLS connection (prior to data transfer) fails to
@@ -341,13 +352,12 @@ class IotCoreCredentialProviderSession:
         host_resolver: DefaultHostResolver = DefaultHostResolver(event_loop_group)
         bootstrap: ClientBootstrap = ClientBootstrap(event_loop_group, host_resolver)
 
-        tls_ctx_opt: TlsContextOptions = TlsContextOptions.create_client_with_mtls(
+        tls_ctx_opt = TlsContextOptions.create_client_with_mtls(
             cert_buffer=certificate, key_buffer=private_key
         )
         if ca:
             tls_ctx_opt.override_default_trust_store(ca)
-        # FIX - remove when done testing
-        tls_ctx_opt.verify_peer = False
+        tls_ctx_opt.verify_peer = verify_peer
         tls_ctx = ClientTlsContext(tls_ctx_opt)
         tls_conn_opt: TlsConnectionOptions = cast(
             TlsConnectionOptions, tls_ctx.new_connection_options()
@@ -371,6 +381,7 @@ class IotCoreCredentialProviderSession:
         port: int,
         certificate: bytes,
         pkcs11: Pkcs11Config,
+        verify_peer: bool = True,
         ca: bytes | None = None,
     ) -> HttpClientConnection:
         """HTTP client connection using mutual TLS with PKCS#11 for crypto operations.
@@ -380,6 +391,7 @@ class IotCoreCredentialProviderSession:
             certificate: Certificate in PKCS#7 armored (PEM) byte format
             port: Port number to use for HTTPS connection. Default is 443.
             pkcs11: PKCS#11 configuration for crypto operations.
+            verify_peer: If set to True will verify server certificate against endpoint.
             ca: Certificate authority in bytes. Default is None.
 
         Returns:
@@ -405,9 +417,11 @@ class IotCoreCredentialProviderSession:
             cert_file_contents=certificate,
         )
 
-        # Coverage exclusion due to some operating systems not supporting PKCS#11.
+        # ###### Coverage exclusion due to some operating systems not supporting PKCS#11
+        # ###### and never reaching here.
         if ca:  # pragma: os-not-linux
             tls_ctx_opt.override_default_trust_store(ca)
+        tls_ctx_opt.verify_peer = verify_peer  # pragma: os-not-linux
         tls_ctx = ClientTlsContext(tls_ctx_opt)  # pragma: os-not-linux
         tls_conn_opt: TlsConnectionOptions = cast(
             TlsConnectionOptions, tls_ctx.new_connection_options()
@@ -423,6 +437,7 @@ class IotCoreCredentialProviderSession:
             return connection_future.result(10)
         except AwsCrtError as e:  # pragma: os-not-linux
             raise ValueError(f"Error completing mTLS connection: {e}") from e
+        # ###### End coverage exclusion
 
     @staticmethod
     def __load_certificate(certificate: str | bytes) -> bytes:

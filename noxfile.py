@@ -34,7 +34,7 @@ nox.options.sessions = (
     "safety",
     "mypy",
     "tests",
-    "typeguard",
+    # "typeguard",  # require features of 3.0.0, no recent updates
     "xdoctest",
     "docs-build",
 )
@@ -180,7 +180,6 @@ def tests(session: Session) -> None:
         "coverage-conditional-plugin",
     )
     try:
-        session.run("pip", "list")
         session.run("coverage", "run", "--parallel", "-m", "pytest", *session.posargs)
     finally:
         if session.interactive:
