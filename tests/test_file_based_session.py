@@ -116,6 +116,7 @@ def test_session_with_invalid_credentials() -> None:
             private_key="tests/assets/client_rsa2048.key",
             ca=amazon_root_ca1,
             thing_name="my_iot_thing_name",
+            awscrt_log_level=LogLevel.Trace,
         ).get_session().client("sts").get_caller_identity()
 
 
