@@ -24,6 +24,7 @@ from aws_iot_core_credential_provider_session_helper.iot_core_credential_provide
 cert_bytes = b"cert bytes"
 key_bytes = b"key bytes"
 
+# OS types for defining test server
 if "GITHUB_RUNNER" in os.environ:
     if os.environ["GITHUB_RUNNER"] == "ubuntu-latest":  # pragma: no cover
         # Force IPv6 which is what awscrt will prefer
@@ -33,8 +34,10 @@ if "GITHUB_RUNNER" in os.environ:
 else:
     # All others will default to IPv4
     server_endpoint = "localhost"
-
 os_type = platform.system()
+
+with open("tests/assets/AmazonRootCA1.pem", "r") as f:
+    amazon_root_ca1 = f.read().encode("utf-8")
 
 
 @pytest.fixture(scope="session")
@@ -111,6 +114,7 @@ def test_session_with_invalid_credentials() -> None:
             role_alias="iot_role_alias",
             certificate="tests/assets/client_rsa2048.pem",
             private_key="tests/assets/client_rsa2048.key",
+            ca=amazon_root_ca1,
             thing_name="my_iot_thing_name",
         ).get_session().client("sts").get_caller_identity()
 
