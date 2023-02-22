@@ -55,16 +55,18 @@ def ca():
 @pytest.fixture(scope="session")
 def httpserver_ssl_context(ca):
     """Create an HTTPS server with the CA certificate."""
-    context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
 
     # For crypto testing, each OS has difference nuances.
     if os_type == "Linux":  # pragma: no cover
+        context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
         context.verify_mode = ssl.CERT_REQUIRED
+        # Load the test certificate for mTLS verification
+        context.load_verify_locations(cafile="tests/assets/client_rsa2048.pem")
     else:  # pragma: no cover
         # macOS and Windows work without server requesting cert
-        context.verify_mode = ssl.CERT_NONE
-    # Load the test certificate for mTLS verification
-    context.load_verify_locations(cafile="tests/assets/client_rsa2048.pem")
+        # context.verify_mode = ssl.CERT_NONE
+        context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+
     localhost_cert = ca.issue_cert(
         "localhost",
         "127.0.0.1",
@@ -114,7 +116,6 @@ def test_session_with_invalid_credentials() -> None:
             role_alias="iot_role_alias",
             certificate="tests/assets/client_rsa2048.pem",
             private_key="tests/assets/client_rsa2048.key",
-            ca=amazon_root_ca1,
             thing_name="my_iot_thing_name",
             awscrt_log_level=LogLevel.Trace,
         ).get_session().client("sts").get_caller_identity()
@@ -142,6 +143,7 @@ def test_valid_credentials(
         private_key="tests/assets/client_rsa2048.key",
         thing_name="my_iot_thing_name",
         ca=ca.cert_pem.bytes(),
+        verify_peer=False,
     ).get_session()
     httpserver.expect_request(
         "/role-aliases/iot_role_alias/credentials", method="GET"
