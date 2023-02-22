@@ -6,6 +6,8 @@ SPDX-License-Identifier: Apache-2.0
 These tests focus on the PKCS#11 interface for credentials.
 """
 import datetime
+import os
+import platform
 import ssl
 
 import pytest
@@ -18,6 +20,19 @@ from aws_iot_core_credential_provider_session_helper.iot_core_credential_provide
 from aws_iot_core_credential_provider_session_helper.iot_core_credential_provider import (
     Pkcs11Config,
 )
+
+
+if "GITHUB_RUNNER" in os.environ:
+    if os.environ["GITHUB_RUNNER"] == "ubuntu-latest":  # pragma: no cover
+        # Force IPv6 which is what awscrt will prefer
+        server_endpoint = "::1"
+    else:
+        server_endpoint = "localhost"  # pragma: no cover
+else:
+    # All others will default to IPv4
+    server_endpoint = "localhost"
+
+os_type = platform.system()
 
 
 @pytest.fixture(scope="session")
@@ -35,8 +50,21 @@ def ca():
 @pytest.fixture(scope="session")
 def httpserver_ssl_context(ca):
     """Create an HTTPS server with the CA certificate."""
-    context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-    localhost_cert = ca.issue_cert("localhost")
+    context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+
+    # For crypto testing, each OS has difference nuances.
+    if os_type == "Linux":  # pragma: no cover
+        context.verify_mode = ssl.CERT_REQUIRED
+    else:  # pragma: no cover
+        # macOS and Windows work without server requesting cert
+        context.verify_mode = ssl.CERT_NONE
+    # Load the test certificate for mTLS verification
+    context.load_verify_locations(cafile="tests/assets/client_rsa2048.pem")
+    localhost_cert = ca.issue_cert(
+        "localhost",
+        "127.0.0.1",
+        "::1",
+    )
     localhost_cert.configure_cert(context)
     return context
 

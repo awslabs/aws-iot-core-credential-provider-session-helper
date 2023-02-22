@@ -7,6 +7,7 @@ These tests focus on testing the session via files or values for certificates an
 """
 import datetime
 import os
+import platform
 import ssl
 
 import pytest
@@ -33,6 +34,8 @@ else:
     # All others will default to IPv4
     server_endpoint = "localhost"
 
+os_type = platform.system()
+
 
 @pytest.fixture(scope="session")
 def httpserver_listen_address():
@@ -49,9 +52,20 @@ def ca():
 @pytest.fixture(scope="session")
 def httpserver_ssl_context(ca):
     """Create an HTTPS server with the CA certificate."""
-    context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+    context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+
+    # For crypto testing, each OS has difference nuances.
+    if os_type == "Linux":  # pragma: no cover
+        context.verify_mode = ssl.CERT_REQUIRED
+    else:  # pragma: no cover
+        # macOS and Windows work without server requesting cert
+        context.verify_mode = ssl.CERT_NONE
+    # Load the test certificate for mTLS verification
+    context.load_verify_locations(cafile="tests/assets/client_rsa2048.pem")
     localhost_cert = ca.issue_cert(
-        "localhost", "127.0.0.1", "::1", common_name="localhost"
+        "localhost",
+        "127.0.0.1",
+        "::1",
     )
     localhost_cert.configure_cert(context)
     return context
@@ -123,8 +137,6 @@ def test_valid_credentials(
         private_key="tests/assets/client_rsa2048.key",
         thing_name="my_iot_thing_name",
         ca=ca.cert_pem.bytes(),
-        # Need to set for GHA - CA not getting used.
-        verify_peer=False,
     ).get_session()
     httpserver.expect_request(
         "/role-aliases/iot_role_alias/credentials", method="GET"
