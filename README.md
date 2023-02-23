@@ -1,9 +1,9 @@
 # AWS IoT Core Credential Provider Session Helper
 
-[![PyPI](https://img.shields.io/pypi/v/awsiot-credentialhelper.svg)][pypi status]
-[![Status](https://img.shields.io/pypi/status/awsiot-credentialhelper.svg)][pypi status]
-[![Python Version](https://img.shields.io/pypi/pyversions/awsiot-credentialhelper)][pypi status]
-[![License](https://img.shields.io/pypi/l/awsiot-credentialhelper)][license]
+[![PyPI](https://img.shields.io/pypi/v/awsiot-credential-helper.svg)][pypi status]
+[![Status](https://img.shields.io/pypi/status/awsiot-credential-helper.svg)][pypi status]
+[![Python Version](https://img.shields.io/pypi/pyversions/awsiot-credential-helper)][pypi status]
+[![License](https://img.shields.io/pypi/l/awsiot-credential-helper)][license]
 
 [![Tests](https://github.com/awslabs/aws-iot-core-credential-provider-session-helper/workflows/Tests/badge.svg)][tests]
 [![codecov](https://codecov.io/gh/awslabs/aws-iot-core-credential-provider-session-helper/branch/main/graph/badge.svg?token=8V1XZY37BQ)](https://codecov.io/gh/awslabs/aws-iot-core-credential-provider-session-helper)
@@ -11,7 +11,7 @@
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)][pre-commit]
 [![Black](https://img.shields.io/badge/code%20style-black-000000.svg)][black]
 
-[pypi status]: https://pypi.org/project/awsiot-credentialhelper/
+[pypi status]: https://pypi.org/project/awsiot-credential-helper/
 [tests]: https://github.com/awslabs/aws-iot-core-credential-provider-session-helper/actions?workflow=Tests
 [pre-commit]: https://github.com/pre-commit/pre-commit
 [black]: https://github.com/psf/black
@@ -34,7 +34,7 @@ This package provides an easy way to create a **refreshable** Boto3 Session usin
 You can install _AWS IoT Core Credential Provider Session Helper_ via [pip] from [PyPI]:
 
 ```console
-python3 -m pip install awsiot-credentialhelper
+python3 -m pip install awsiot-credential-helper
 ```
 
 ## Usage
@@ -42,7 +42,7 @@ python3 -m pip install awsiot-credentialhelper
 Prior to use, ensure all cloud-side resources for IAM and AWS IoT Core have been properly created and configured. Then, with the AWS IoT registered X.509 certificate and corresponding private key (e.g., `iot_thing.pem` and `iot_thing.pem.key`), you can create and use the helper as follows:
 
 ```python
-from awsiot_credentialhelper.boto3_session import Boto3SessionProvider
+from awsiot_credential_helper.boto3_session import Boto3SessionProvider
 
 # Create boto3 session object
 boto3_session = Boto3SessionProvider(

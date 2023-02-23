@@ -49,9 +49,9 @@ RUN softhsm2-util --import hsm_thing.key --slot $(cat slot.txt) --label hsm_thin
     --id 0000 --pin 1234
 
 # Install package to test
-COPY awsiot_credentialhelper-0.0.0-py3-none-any.whl .
+COPY awsiot_credential_helper-0.0.0-py3-none-any.whl .
 RUN pip3.11 install --upgrade pip \
-    && pip3.11 install awsiot_credentialhelper-0.0.0-py3-none-any.whl
+    && pip3.11 install awsiot_credential_helper-0.0.0-py3-none-any.whl
     # Run the application:
 COPY hsm_validate.py .
 COPY entrypoint.sh .

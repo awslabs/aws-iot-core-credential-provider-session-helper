@@ -14,8 +14,8 @@ import pytest
 import pytest_httpserver
 import trustme
 
-from awsiot_credentialhelper.boto3_session import Boto3SessionProvider
-from awsiot_credentialhelper.boto3_session import Pkcs11Config
+from awsiot_credential_helper.boto3_session import Boto3SessionProvider
+from awsiot_credential_helper.boto3_session import Pkcs11Config
 
 
 if "GITHUB_RUNNER" in os.environ:

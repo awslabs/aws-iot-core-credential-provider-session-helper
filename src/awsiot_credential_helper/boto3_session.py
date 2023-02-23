@@ -208,7 +208,7 @@ class Boto3SessionProvider:
         AWS region for the returned sessions object. Any set of `Boto3 session arguments <https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html#boto3.session.Session>`_ can be passed.
 
         Example:
-            >>> from awsiot_credentialhelper.boto3_session import Boto3SessionProvider
+            >>> from awsiot_credential_helper.boto3_session import Boto3SessionProvider
             >>> boto3_session = Boto3SessionProvider(
             ...     endpoint="your_endpoint.credentials.iot.us-west-2.amazonaws.com",
             ...     role_alias="your_aws_iot_role_alias_name",
