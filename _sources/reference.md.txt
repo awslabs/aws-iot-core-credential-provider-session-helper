@@ -1,8 +1,8 @@
 # Reference
 
-## aws_iot_core_credential_provider_session_helper
+## awsiot_credentialhelper
 
 ```{eval-rst}
-.. automodule:: aws_iot_core_credential_provider_session_helper
+.. automodule:: awsiot_credentialhelper.boto3_session
    :members:
 ```

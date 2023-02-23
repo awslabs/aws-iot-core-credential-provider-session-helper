@@ -11,13 +11,13 @@ This walks through the steps to create and use the helper.
 ```python
 # 1. Shorten the name of the session helper class
 from awscrt.io import LogLevel
-import aws_iot_core_credential_provider_session_helper as iotcp_session
+from awsiot_credentialhelper.boto3_session import Boto3SessionProvider
 
 # 2. Create boto3 session object, endpoint name must match the AWS accounts unique
 #    credential provider endpoint if using certificates registered without a
 #    certificate authority. The get_session can also be passed a specific region other
 #    than the region where credentials are obtained.
-boto3_session = iotcp_session.IotCoreCredentialProviderSession(
+boto3_session = Boto3SessionProvider(
     endpoint="your_endpoint.credentials.iot.us-west-2.amazonaws.com",
     role_alias="your_aws_iot_role_alias_name",
     certificate="/home/iotuser/.credentials/iot_thing.pem",
@@ -58,9 +58,9 @@ By passing the certificate and private key as `bytes`, the helper will work as e
 
 ```python
 import os
-import aws_iot_core_credential_provider_session_helper as iotcp_session
+from awsiot_credentialhelper.boto3_session import Boto3SessionProvider
 
-boto3_session = iotcp_session.IotCoreCredentialProviderSession(
+boto3_session = Boto3SessionProvider(
     endpoint="your_endpoint.credentials.iot.us-west-2.amazonaws.com",
     role_alias="your_aws_iot_role_alias_name",
     certificate=bytes(os.environ["CERTIFICATE_PEM"].encode("utf-8")),
@@ -73,7 +73,7 @@ These can also be mixed. For instance the certificate can be passed as file and 
 
 ```python
 ...
-boto3_session = iotcp_session.IotCoreCredentialProviderSession(
+boto3_session = Boto3SessionProvider(
     endpoint="your_endpoint.credentials.iot.us-west-2.amazonaws.com",
     role_alias="your_aws_iot_role_alias_name",
     certificate="/home/iotuser/.credentials/iot_thing.pem",
@@ -103,14 +103,14 @@ However, there are some caveats:
 Instead of provide the `private_key` parameter, a `pkcs11` configuration is provided. The example below expects the private key to be located in slot 1 _or_ have the defined `token_label`, and the private key is labeled with `test_key`. The `user_pin` is used to access the HSM. The steps to evaluate the private key are complex, please see the [awscrt io documentation](https://awslabs.github.io/aws-crt-python/api/io.html#awscrt.io.TlsContextOptions.create_client_with_mtls_pkcs11) for more details.
 
 ```python
-from aws_iot_core_credential_provider_session_helper.iot_core_credential_provider import (
-    IotCoreCredentialProviderSession,
+from awsiot_credentialhelper.boto3_session import (
+    Boto3SessionProvider,
 )
-from aws_iot_core_credential_provider_session_helper.iot_core_credential_provider import (
+from awsiot_credentialhelper.boto3_session import (
     Pkcs11Config,
 )
 
-boto3_session = IotCoreCredentialProviderSession(
+boto3_session = Boto3SessionProvider(
     endpoint="your_endpoint.credentials.iot.us-west-2.amazonaws.com",
     role_alias="your_aws_iot_role_alias_name",
     certificate="/home/iotuser/.credentials/iot_thing.pem",

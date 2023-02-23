@@ -198,20 +198,14 @@
         <article role="main">
           <section id="reference">
 <h1>Reference<a class="headerlink" href="#reference" title="Permalink to this heading">#</a></h1>
-<section id="module-aws_iot_core_credential_provider_session_helper">
-<span id="aws-iot-core-credential-provider-session-helper"></span><h2>aws_iot_core_credential_provider_session_helper<a class="headerlink" href="#module-aws_iot_core_credential_provider_session_helper" title="Permalink to this heading">#</a></h2>
-<p>AWS IoT Core Credential Provider Session Helper.</p>
+<section id="module-awsiot_credentialhelper.boto3_session">
+<span id="awsiot-credentialhelper"></span><h2>awsiot_credentialhelper<a class="headerlink" href="#module-awsiot_credentialhelper.boto3_session" title="Permalink to this heading">#</a></h2>
+<p>Session object classes and methods.</p>
 <p>Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 SPDX-License-Identifier: Apache-2.0</p>
 <dl class="py class">
-<dt class="sig sig-object py" id="aws_iot_core_credential_provider_session_helper.IAMBotocoreCredentials">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aws_iot_core_credential_provider_session_helper.</span></span><span class="sig-name descname"><span class="pre">IAMBotocoreCredentials</span></span><a class="headerlink" href="#aws_iot_core_credential_provider_session_helper.IAMBotocoreCredentials" title="Permalink to this definition">#</a></dt>
-<dd><p>IAM Credentials for Botocore use.</p>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="aws_iot_core_credential_provider_session_helper.IotCoreCredentialProviderSession">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aws_iot_core_credential_provider_session_helper.</span></span><span class="sig-name descname"><span class="pre">IotCoreCredentialProviderSession</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endpoint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">role_alias</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thing_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">certificate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">private_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pkcs11</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#aws_iot_core_credential_provider_session_helper.Pkcs11Config" title="aws_iot_core_credential_provider_session_helper.iot_core_credential_provider.Pkcs11Config"><span class="pre">aws_iot_core_credential_provider_session_helper.iot_core_credential_provider.Pkcs11Config</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ca</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">awscrt_log_level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">awscrt.io.LogLevel</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verify_peer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#aws_iot_core_credential_provider_session_helper.IotCoreCredentialProviderSession" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="awsiot_credentialhelper.boto3_session.Boto3SessionProvider">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">awsiot_credentialhelper.boto3_session.</span></span><span class="sig-name descname"><span class="pre">Boto3SessionProvider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endpoint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">role_alias</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thing_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">certificate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">private_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pkcs11</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#awsiot_credentialhelper.boto3_session.Pkcs11Config" title="awsiot_credentialhelper.boto3_session.Pkcs11Config"><span class="pre">awsiot_credentialhelper.boto3_session.Pkcs11Config</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ca</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">awscrt_log_level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">awscrt.io.LogLevel</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verify_peer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#awsiot_credentialhelper.boto3_session.Boto3SessionProvider" title="Permalink to this definition">#</a></dt>
 <dd><p>Session object using the AWS IoT Core Credential Provider.</p>
 <p>Creates an object from credentials used to authenticated against the
 AWS IoT Core Credential Provider. After creation, a call to <code class="docutils literal notranslate"><span class="pre">get_session()</span></code>
@@ -248,12 +242,28 @@ endpoint. Only set to <code class="docutils literal notranslate"><span class="pr
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="aws_iot_core_credential_provider_session_helper.IotCoreCredentialProviderSession.get_session">
-<span class="sig-name descname"><span class="pre">get_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Session</span></span></span><a class="headerlink" href="#aws_iot_core_credential_provider_session_helper.IotCoreCredentialProviderSession.get_session" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="awsiot_credentialhelper.boto3_session.Boto3SessionProvider.get_session">
+<span class="sig-name descname"><span class="pre">get_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Session</span></span></span><a class="headerlink" href="#awsiot_credentialhelper.boto3_session.Boto3SessionProvider.get_session" title="Permalink to this definition">#</a></dt>
 <dd><p>Create a Boto3 session object with credential refresh using AWS IoT Credential Provider.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code> are passed to the Boto3 session object. The most common use is to set the
+AWS region for the returned sessions object. Any set of <a class="reference external" href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html#boto3.session.Session">Boto3 session arguments</a> can be passed.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">awsiot_credentialhelper.boto3_session</span> <span class="kn">import</span> <span class="n">Boto3SessionProvider</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">boto3_session</span> <span class="o">=</span> <span class="n">Boto3SessionProvider</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">endpoint</span><span class="o">=</span><span class="s2">&quot;your_endpoint.credentials.iot.us-west-2.amazonaws.com&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">role_alias</span><span class="o">=</span><span class="s2">&quot;your_aws_iot_role_alias_name&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">certificate</span><span class="o">=</span><span class="s2">&quot;iot_thing.pem&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">private_key</span><span class="o">=</span><span class="s2">&quot;iot_thing.pem.key&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">thing_name</span><span class="o">=</span><span class="s2">&quot;iot_thing&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">get_session</span><span class="p">(</span><span class="n">region</span><span class="o">=</span><span class="s2">&quot;eu-central-1&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Boto3 session object tied to IoT Credential Provider for obtaining credentials.</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>**kwargs</strong> – Any set of arguments can be passed.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Boto3 session object tied to IoT Credential Provider for obtaining credentials.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -261,10 +271,67 @@ endpoint. Only set to <code class="docutils literal notranslate"><span class="pr
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="aws_iot_core_credential_provider_session_helper.Pkcs11Config">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aws_iot_core_credential_provider_session_helper.</span></span><span class="sig-name descname"><span class="pre">Pkcs11Config</span></span><a class="headerlink" href="#aws_iot_core_credential_provider_session_helper.Pkcs11Config" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="awsiot_credentialhelper.boto3_session.Pkcs11Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">awsiot_credentialhelper.boto3_session.</span></span><span class="sig-name descname"><span class="pre">Pkcs11Config</span></span><a class="headerlink" href="#awsiot_credentialhelper.boto3_session.Pkcs11Config" title="Permalink to this definition">#</a></dt>
 <dd><p>PKCS11 Configuration for Credential Provider.</p>
 <p>These are needed parameters for the PKCS#11 provider.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="awsiot_credentialhelper.boto3_session.Pkcs11Config.pkcs11_lib">
+<span class="sig-name descname"><span class="pre">pkcs11_lib</span></span><a class="headerlink" href="#awsiot_credentialhelper.boto3_session.Pkcs11Config.pkcs11_lib" title="Permalink to this definition">#</a></dt>
+<dd><p>Path to PKCS#11 library on disk.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="awsiot_credentialhelper.boto3_session.Pkcs11Config.user_pin">
+<span class="sig-name descname"><span class="pre">user_pin</span></span><a class="headerlink" href="#awsiot_credentialhelper.boto3_session.Pkcs11Config.user_pin" title="Permalink to this definition">#</a></dt>
+<dd><p>User pin for PKCS#11 library.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>NotRequired[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="awsiot_credentialhelper.boto3_session.Pkcs11Config.slot_id">
+<span class="sig-name descname"><span class="pre">slot_id</span></span><a class="headerlink" href="#awsiot_credentialhelper.boto3_session.Pkcs11Config.slot_id" title="Permalink to this definition">#</a></dt>
+<dd><p>Slot ID for PKCS#11 library. If not provided,
+the <code class="docutils literal notranslate"><span class="pre">token_label</span></code> will be used instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>NotRequired[int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="awsiot_credentialhelper.boto3_session.Pkcs11Config.token_label">
+<span class="sig-name descname"><span class="pre">token_label</span></span><a class="headerlink" href="#awsiot_credentialhelper.boto3_session.Pkcs11Config.token_label" title="Permalink to this definition">#</a></dt>
+<dd><p>Token label for PKCS#11 library. If not provided,
+the <code class="docutils literal notranslate"><span class="pre">slot_id</span></code> will be used instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>NotRequired[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="awsiot_credentialhelper.boto3_session.Pkcs11Config.private_key_label">
+<span class="sig-name descname"><span class="pre">private_key_label</span></span><a class="headerlink" href="#awsiot_credentialhelper.boto3_session.Pkcs11Config.private_key_label" title="Permalink to this definition">#</a></dt>
+<dd><p>Label for private key to use.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>NotRequired[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -326,13 +393,19 @@ endpoint. Only set to <code class="docutils literal notranslate"><span class="pr
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Reference</a><ul>
-<li><a class="reference internal" href="#module-aws_iot_core_credential_provider_session_helper">aws_iot_core_credential_provider_session_helper</a><ul>
-<li><a class="reference internal" href="#aws_iot_core_credential_provider_session_helper.IAMBotocoreCredentials"><code class="docutils literal notranslate"><span class="pre">IAMBotocoreCredentials</span></code></a></li>
-<li><a class="reference internal" href="#aws_iot_core_credential_provider_session_helper.IotCoreCredentialProviderSession"><code class="docutils literal notranslate"><span class="pre">IotCoreCredentialProviderSession</span></code></a><ul>
-<li><a class="reference internal" href="#aws_iot_core_credential_provider_session_helper.IotCoreCredentialProviderSession.get_session"><code class="docutils literal notranslate"><span class="pre">IotCoreCredentialProviderSession.get_session()</span></code></a></li>
+<li><a class="reference internal" href="#module-awsiot_credentialhelper.boto3_session">awsiot_credentialhelper</a><ul>
+<li><a class="reference internal" href="#awsiot_credentialhelper.boto3_session.Boto3SessionProvider"><code class="docutils literal notranslate"><span class="pre">Boto3SessionProvider</span></code></a><ul>
+<li><a class="reference internal" href="#awsiot_credentialhelper.boto3_session.Boto3SessionProvider.get_session"><code class="docutils literal notranslate"><span class="pre">Boto3SessionProvider.get_session()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#aws_iot_core_credential_provider_session_helper.Pkcs11Config"><code class="docutils literal notranslate"><span class="pre">Pkcs11Config</span></code></a></li>
+<li><a class="reference internal" href="#awsiot_credentialhelper.boto3_session.Pkcs11Config"><code class="docutils literal notranslate"><span class="pre">Pkcs11Config</span></code></a><ul>
+<li><a class="reference internal" href="#awsiot_credentialhelper.boto3_session.Pkcs11Config.pkcs11_lib"><code class="docutils literal notranslate"><span class="pre">Pkcs11Config.pkcs11_lib</span></code></a></li>
+<li><a class="reference internal" href="#awsiot_credentialhelper.boto3_session.Pkcs11Config.user_pin"><code class="docutils literal notranslate"><span class="pre">Pkcs11Config.user_pin</span></code></a></li>
+<li><a class="reference internal" href="#awsiot_credentialhelper.boto3_session.Pkcs11Config.slot_id"><code class="docutils literal notranslate"><span class="pre">Pkcs11Config.slot_id</span></code></a></li>
+<li><a class="reference internal" href="#awsiot_credentialhelper.boto3_session.Pkcs11Config.token_label"><code class="docutils literal notranslate"><span class="pre">Pkcs11Config.token_label</span></code></a></li>
+<li><a class="reference internal" href="#awsiot_credentialhelper.boto3_session.Pkcs11Config.private_key_label"><code class="docutils literal notranslate"><span class="pre">Pkcs11Config.private_key_label</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
