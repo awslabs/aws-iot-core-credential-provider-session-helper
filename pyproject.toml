@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 [tool.poetry]
 name = "awsiot-credentialhelper"
-version = "0.0.0"
+version = "0.1.0"
 description = "AWS IoT Core Credential Provider Session Helper"
 authors = ["Gavin Adams <gavinaws@amazon.com>"]
 license = "Apache-2.0"
