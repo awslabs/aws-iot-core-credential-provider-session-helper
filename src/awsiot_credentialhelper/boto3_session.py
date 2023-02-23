@@ -215,7 +215,7 @@ class Boto3SessionProvider:
             ...     certificate="iot_thing.pem",
             ...     private_key="iot_thing.pem.key",
             ...     thing_name="iot_thing",
-            ... ).get_session(region="eu-central-1")
+            ... ).get_session(region="eu-central-1") # doctest: +SKIP
 
         Args:
             **kwargs: Any set of arguments can be passed.
