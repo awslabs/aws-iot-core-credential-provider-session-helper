@@ -6,6 +6,7 @@
 [![License](https://img.shields.io/pypi/l/awsiot-credentialhelper)][license]
 
 [![Tests](https://github.com/awslabs/aws-iot-core-credential-provider-session-helper/workflows/Tests/badge.svg)][tests]
+[![codecov](https://codecov.io/gh/awslabs/aws-iot-core-credential-provider-session-helper/branch/main/graph/badge.svg?token=8V1XZY37BQ)](https://codecov.io/gh/awslabs/aws-iot-core-credential-provider-session-helper))]
 
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)][pre-commit]
 [![Black](https://img.shields.io/badge/code%20style-black-000000.svg)][black]
