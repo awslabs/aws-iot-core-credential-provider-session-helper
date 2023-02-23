@@ -221,14 +221,8 @@ class Boto3SessionProvider:
             **kwargs: Any set of arguments can be passed.
 
         Returns:
-           Boto3 session object tied to IoT Credential Provider for obtaining credentials.
-
-        .. _Boto3 session arguments:
-            https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html#boto3.session.Session
-        .. _Google Python Style Guide:
-           https://google.github.io/styleguide/pyguide.html
-
-        """
+            Session: Boto3 session object tied to IoT Credential Provider for obtaining credentials.
+        """  # noqa: B950
         session = get_botocore_session()
         # typing - there is a _session attribute on the Session object
         session._credentials = self._get_refreshable_credentials()  # type: ignore
