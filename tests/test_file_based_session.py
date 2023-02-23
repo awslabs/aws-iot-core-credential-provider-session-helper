@@ -16,7 +16,7 @@ import trustme
 from awscrt.io import LogLevel
 from botocore.exceptions import ClientError
 
-from awsiot_credential_helper.boto3_session import Boto3SessionProvider
+from awsiot_credentialhelper.boto3_session import Boto3SessionProvider
 
 
 cert_bytes = b"cert bytes"
