@@ -1,7 +1,7 @@
 # Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 [tool.poetry]
-name = "aws-iot-core-credential-provider-session-helper"
+name = "awsiot-credentialhelper"
 version = "0.0.0"
 description = "AWS IoT Core Credential Provider Session Helper"
 authors = ["Gavin Adams <gavinaws@amazon.com>"]
@@ -62,7 +62,7 @@ tests = ["tests", "*/tests"]
 [tool.coverage.run]
 branch = true
 plugins = ["coverage_conditional_plugin"]
-source = ["aws_iot_core_credential_provider_session_helper", "tests"]
+source = ["awsiot_credentialhelper", "tests"]
 
 [tool.coverage.coverage_conditional_plugin.rules]
 # Here we specify our pragma rules:

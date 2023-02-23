@@ -4,13 +4,13 @@ This code is intended to be run as a test case within a Linux environment.
 """
 from os import environ
 
-import aws_iot_core_credential_provider_session_helper as iotcp
-from aws_iot_core_credential_provider_session_helper import Pkcs11Config
+import awsiot_credentialhelper.boto3_session as iotcp
+from awsiot_credentialhelper.boto3_session import Pkcs11Config
 
 
 SLOT_ID = str(environ.get("SLOT_ID"))
 
-session = iotcp.IotCoreCredentialProviderSession(
+session = iotcp.Boto3SessionProvider(
     endpoint="invalid_test_endpoint.credentials.iot.us-west-2.amazonaws.com",
     role_alias="test_role_alias",
     certificate="hsm_thing-cert.pem",

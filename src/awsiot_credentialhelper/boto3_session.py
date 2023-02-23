@@ -35,7 +35,7 @@ from typing_extensions import NotRequired
 logger = logging.getLogger(__name__)
 
 
-class IAMBotocoreCredentials(TypedDict):
+class _IAMBotocoreCredentials(TypedDict):
     """IAM Credentials for Botocore use."""
 
     access_key: str
@@ -48,6 +48,15 @@ class Pkcs11Config(TypedDict):
     """PKCS11 Configuration for Credential Provider.
 
     These are needed parameters for the PKCS#11 provider.
+
+    Attributes:
+        pkcs11_lib (str): Path to PKCS#11 library on disk.
+        user_pin (NotRequired[str]): User pin for PKCS#11 library.
+        slot_id (NotRequired[int]): Slot ID for PKCS#11 library. If not provided,
+            the ``token_label`` will be used instead.
+        token_label (NotRequired[str]): Token label for PKCS#11 library. If not provided,
+            the ``slot_id`` will be used instead.
+        private_key_label (NotRequired[str]): Label for private key to use.
     """
 
     pkcs11_lib: str
@@ -57,7 +66,7 @@ class Pkcs11Config(TypedDict):
     private_key_label: NotRequired[str | None]
 
 
-class AwscrtResponse:
+class _AwscrtResponse:
     """Holds contents of incoming HTTP response."""
 
     def __init__(self):
@@ -76,7 +85,7 @@ class AwscrtResponse:
         self.body.extend(chunk)  # pragma: no cover
 
 
-class IotCoreCredentialProviderSession:
+class Boto3SessionProvider:
     """Session object using the AWS IoT Core Credential Provider.
 
     Creates an object from credentials used to authenticated against the
@@ -195,8 +204,30 @@ class IotCoreCredentialProviderSession:
     def get_session(self, **kwargs) -> Session:
         """Create a Boto3 session object with credential refresh using AWS IoT Credential Provider.
 
+        The ``**kwargs`` are passed to the Boto3 session object. The most common use is to set the
+        AWS region for the returned sessions object. Any set of `Boto3 session arguments <https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html#boto3.session.Session>`_ can be passed.
+
+        Example:
+            >>> from awsiot_credentialhelper.boto3_session import Boto3SessionProvider
+            >>> boto3_session = Boto3SessionProvider(
+            ...     endpoint="your_endpoint.credentials.iot.us-west-2.amazonaws.com",
+            ...     role_alias="your_aws_iot_role_alias_name",
+            ...     certificate="iot_thing.pem",
+            ...     private_key="iot_thing.pem.key",
+            ...     thing_name="iot_thing",
+            ... ).get_session(region="eu-central-1")
+
+        Args:
+            **kwargs: Any set of arguments can be passed.
+
         Returns:
            Boto3 session object tied to IoT Credential Provider for obtaining credentials.
+
+        .. _Boto3 session arguments:
+            https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html#boto3.session.Session
+        .. _Google Python Style Guide:
+           https://google.github.io/styleguide/pyguide.html
+
         """
         session = get_botocore_session()
         # typing - there is a _session attribute on the Session object
@@ -258,7 +289,7 @@ class IotCoreCredentialProviderSession:
         )
         return
 
-    def __get_credentials(self) -> IAMBotocoreCredentials:
+    def __get_credentials(self) -> _IAMBotocoreCredentials:
         """Compute and make the request to IoT Credential Provider endpoint to retrieve IAM Credentials.
 
         Args: None
@@ -278,7 +309,7 @@ class IotCoreCredentialProviderSession:
 
     def _mtls_session(
         self,
-    ) -> IAMBotocoreCredentials:
+    ) -> _IAMBotocoreCredentials:
         """Uses mTLS with provided X.509 certificate/key directly to return IAM credentials.
 
         This uses the https://awslabs.github.io/aws-crt-python/index.html module for making
@@ -303,7 +334,7 @@ class IotCoreCredentialProviderSession:
         request = HttpRequest("GET", url.path)
         request.headers.add("host", str(url.hostname))
         request.headers.add("x-amzn-iot-thingname", self._thing_name)
-        response = AwscrtResponse()
+        response = _AwscrtResponse()
 
         # Get port number (used for testing on non-privileged port)
         port = 443 if not url.port else url.port
@@ -334,7 +365,7 @@ class IotCoreCredentialProviderSession:
         stream_completion_result = stream.completion_future.result(10)
         if response.status_code == 200:
             credentials = json.loads(response.body.decode("utf-8"))["credentials"]
-            return IAMBotocoreCredentials(
+            return _IAMBotocoreCredentials(
                 access_key=credentials["accessKeyId"],
                 secret_key=credentials["secretAccessKey"],
                 token=credentials["sessionToken"],

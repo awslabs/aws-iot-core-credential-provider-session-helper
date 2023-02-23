@@ -6,7 +6,9 @@
         "editor.defaultFormatter": "ms-python.python"
     },
     "cSpell.words": [
+        "awsiot",
         "awsrequest",
+        "credentialhelper",
         "httpsession",
         "mtls",
         "pkcs",

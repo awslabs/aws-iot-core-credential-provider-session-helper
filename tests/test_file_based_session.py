@@ -16,9 +16,7 @@ import trustme
 from awscrt.io import LogLevel
 from botocore.exceptions import ClientError
 
-from aws_iot_core_credential_provider_session_helper.iot_core_credential_provider import (
-    IotCoreCredentialProviderSession,
-)
+from awsiot_credentialhelper.boto3_session import Boto3SessionProvider
 
 
 cert_bytes = b"cert bytes"
@@ -79,7 +77,7 @@ def httpserver_ssl_context(ca):
 
 def test_get_session_with_files() -> None:
     """Verify session can be created, now with logging!."""
-    session = IotCoreCredentialProviderSession(
+    session = Boto3SessionProvider(
         endpoint="my_endpoint.credentials.iot.us-west-2.amazonaws.com",
         role_alias="iot_role_alias",
         certificate=f"tests/assets/{file_prefix}.pem",
@@ -96,7 +94,7 @@ def test_get_session_with_files() -> None:
 
 def test_get_session_with_variables() -> None:
     """Create session object with cert/key as variables."""
-    session = IotCoreCredentialProviderSession(
+    session = Boto3SessionProvider(
         endpoint="cicd_testing.credentials.iot.us-west-2.amazonaws.com",
         role_alias="iot_role_alias",
         certificate=cert_bytes,
@@ -112,13 +110,13 @@ def test_session_with_invalid_credentials() -> None:
     Expectation: TLS session will not complete.
     """
     with pytest.raises(ValueError, match="Error completing mTLS connection"):
-        IotCoreCredentialProviderSession(
+        Boto3SessionProvider(
             endpoint="cicd_testing.credentials.iot.us-west-2.amazonaws.com",
             role_alias="iot_role_alias",
             certificate=f"tests/assets/{file_prefix}.pem",
             private_key=f"tests/assets/{file_prefix}.key",
             thing_name="my_iot_thing_name",
-            awscrt_log_level=LogLevel.Trace,
+            # awscrt_log_level=LogLevel.Trace,
         ).get_session().client("sts").get_caller_identity()
 
 
@@ -137,7 +135,7 @@ def test_valid_credentials(
     else:  # pragma: no cover
         endpoint = f"{server_endpoint}:7939"
 
-    session = IotCoreCredentialProviderSession(
+    session = Boto3SessionProvider(
         endpoint=endpoint,
         role_alias="iot_role_alias",
         certificate=f"tests/assets/{file_prefix}.pem",
@@ -175,7 +173,7 @@ def test_invalid_credentials(
         endpoint = f"[{server_endpoint}]:7939"
     else:  # pragma: no cover
         endpoint = f"{server_endpoint}:7939"
-    session = IotCoreCredentialProviderSession(
+    session = Boto3SessionProvider(
         endpoint=endpoint,
         role_alias="iot_role_alias",
         certificate=f"tests/assets/{file_prefix}.pem",

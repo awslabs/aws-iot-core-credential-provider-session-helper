@@ -14,12 +14,8 @@ import pytest
 import pytest_httpserver
 import trustme
 
-from aws_iot_core_credential_provider_session_helper.iot_core_credential_provider import (
-    IotCoreCredentialProviderSession,
-)
-from aws_iot_core_credential_provider_session_helper.iot_core_credential_provider import (
-    Pkcs11Config,
-)
+from awsiot_credentialhelper.boto3_session import Boto3SessionProvider
+from awsiot_credentialhelper.boto3_session import Pkcs11Config
 
 
 if "GITHUB_RUNNER" in os.environ:
@@ -76,7 +72,7 @@ def test_privatekey_pkcs_mutually_excluded() -> None:
         ValueError,
         match="Private_key or pkcs11 settings must be specified, neither were provided.",
     ):
-        IotCoreCredentialProviderSession(
+        Boto3SessionProvider(
             endpoint="localhost:8888",
             role_alias="iot_role_alias",
             certificate="tests/assets/client_rsa2048.pem",
@@ -94,7 +90,7 @@ def test_privatekey_pkcs_mutually_excluded() -> None:
         ValueError,
         match="Only private_key OR pkcs11 settings must be specified, both were provided.",
     ):
-        IotCoreCredentialProviderSession(
+        Boto3SessionProvider(
             endpoint="localhost:8888",
             role_alias="iot_role_alias",
             certificate="tests/assets/client_rsa2048.pem",
@@ -110,7 +106,7 @@ def test_missing_pkcs_lib() -> None:
         ValueError,
         match="PKCS#11 library path must be provided.",
     ):
-        IotCoreCredentialProviderSession(
+        Boto3SessionProvider(
             endpoint="localhost:8888",
             role_alias="iot_role_alias",
             certificate="tests/assets/client_rsa2048.pem",
@@ -131,7 +127,7 @@ def test_invalid_pkcs_lib() -> None:
         ValueError,
         match=f"{file_path} is not a valid file path.",
     ):
-        IotCoreCredentialProviderSession(
+        Boto3SessionProvider(
             endpoint="localhost:8888",
             role_alias="iot_role_alias",
             certificate="tests/assets/client_rsa2048.pem",
@@ -146,7 +142,7 @@ def test_invalid_pkcs_lib() -> None:
 
 def test_missing_user_pin() -> None:
     """User pin not provided."""
-    IotCoreCredentialProviderSession(
+    Boto3SessionProvider(
         endpoint="localhost:8888",
         role_alias="iot_role_alias",
         certificate="tests/assets/client_rsa2048.pem",
@@ -169,7 +165,7 @@ def test_full_pkcs11_config(
     """
     one_hour_later = datetime.datetime.utcnow() + datetime.timedelta(hours=1)
 
-    session = IotCoreCredentialProviderSession(
+    session = Boto3SessionProvider(
         endpoint="localhost:8888",
         role_alias="iot_role_alias",
         certificate="tests/assets/client_rsa2048.pem",
