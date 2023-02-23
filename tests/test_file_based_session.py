@@ -35,9 +35,10 @@ else:
     # All others will default to IPv4
     server_endpoint = "localhost"
 os_type = platform.system()
-
-with open("tests/assets/AmazonRootCA1.pem", "r") as f:
-    amazon_root_ca1 = f.read().encode("utf-8")
+if os_type == "Linux":  # pragma: no cover
+    file_prefix = "client_ec256"
+else:  # pragma: no cover
+    file_prefix = "client_rsa2048"
 
 
 @pytest.fixture(scope="session")
@@ -55,13 +56,13 @@ def ca():
 @pytest.fixture(scope="session")
 def httpserver_ssl_context(ca):
     """Create an HTTPS server with the CA certificate."""
-
     # For crypto testing, each OS has difference nuances.
     if os_type == "Linux":  # pragma: no cover
+        print("got here")
         context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
         context.verify_mode = ssl.CERT_REQUIRED
         # Load the test certificate for mTLS verification
-        context.load_verify_locations(cafile="tests/assets/client_rsa2048.pem")
+        context.load_verify_locations(cafile=f"tests/assets/{file_prefix}.pem")
     else:  # pragma: no cover
         # macOS and Windows work without server requesting cert
         # context.verify_mode = ssl.CERT_NONE
@@ -81,8 +82,8 @@ def test_get_session_with_files() -> None:
     session = IotCoreCredentialProviderSession(
         endpoint="my_endpoint.credentials.iot.us-west-2.amazonaws.com",
         role_alias="iot_role_alias",
-        certificate="tests/assets/client_rsa2048.pem",
-        private_key="tests/assets/client_rsa2048.key",
+        certificate=f"tests/assets/{file_prefix}.pem",
+        private_key=f"tests/assets/{file_prefix}.key",
         thing_name="my_iot_thing_name",
         awscrt_log_level=LogLevel.NoLogs,
     )
@@ -114,8 +115,8 @@ def test_session_with_invalid_credentials() -> None:
         IotCoreCredentialProviderSession(
             endpoint="cicd_testing.credentials.iot.us-west-2.amazonaws.com",
             role_alias="iot_role_alias",
-            certificate="tests/assets/client_rsa2048.pem",
-            private_key="tests/assets/client_rsa2048.key",
+            certificate=f"tests/assets/{file_prefix}.pem",
+            private_key=f"tests/assets/{file_prefix}.key",
             thing_name="my_iot_thing_name",
             awscrt_log_level=LogLevel.Trace,
         ).get_session().client("sts").get_caller_identity()
@@ -139,8 +140,8 @@ def test_valid_credentials(
     session = IotCoreCredentialProviderSession(
         endpoint=endpoint,
         role_alias="iot_role_alias",
-        certificate="tests/assets/client_rsa2048.pem",
-        private_key="tests/assets/client_rsa2048.key",
+        certificate=f"tests/assets/{file_prefix}.pem",
+        private_key=f"tests/assets/{file_prefix}.key",
         thing_name="my_iot_thing_name",
         ca=ca.cert_pem.bytes(),
         verify_peer=False,
@@ -177,8 +178,8 @@ def test_invalid_credentials(
     session = IotCoreCredentialProviderSession(
         endpoint=endpoint,
         role_alias="iot_role_alias",
-        certificate="tests/assets/client_rsa2048.pem",
-        private_key="tests/assets/client_rsa2048.key",
+        certificate=f"tests/assets/{file_prefix}.pem",
+        private_key=f"tests/assets/{file_prefix}.key",
         thing_name="my_iot_thing_name",
         ca=ca.cert_pem.bytes(),
     ).get_session()
