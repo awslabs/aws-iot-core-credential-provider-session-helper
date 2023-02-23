@@ -11,7 +11,7 @@ This walks through the steps to create and use the helper.
 ```python
 # 1. Shorten the name of the session helper class
 from awscrt.io import LogLevel
-from awsiot_credential_helper.boto3_session import Boto3SessionProvider
+from awsiot_credentialhelper.boto3_session import Boto3SessionProvider
 
 # 2. Create boto3 session object, endpoint name must match the AWS accounts unique
 #    credential provider endpoint if using certificates registered without a
@@ -58,7 +58,7 @@ By passing the certificate and private key as `bytes`, the helper will work as e
 
 ```python
 import os
-from awsiot_credential_helper.boto3_session import Boto3SessionProvider
+from awsiot_credentialhelper.boto3_session import Boto3SessionProvider
 
 boto3_session = Boto3SessionProvider(
     endpoint="your_endpoint.credentials.iot.us-west-2.amazonaws.com",
@@ -103,10 +103,10 @@ However, there are some caveats:
 Instead of provide the `private_key` parameter, a `pkcs11` configuration is provided. The example below expects the private key to be located in slot 1 _or_ have the defined `token_label`, and the private key is labeled with `test_key`. The `user_pin` is used to access the HSM. The steps to evaluate the private key are complex, please see the [awscrt io documentation](https://awslabs.github.io/aws-crt-python/api/io.html#awscrt.io.TlsContextOptions.create_client_with_mtls_pkcs11) for more details.
 
 ```python
-from awsiot_credential_helper.boto3_session import (
+from awsiot_credentialhelper.boto3_session import (
     Boto3SessionProvider,
 )
-from awsiot_credential_helper.boto3_session import (
+from awsiot_credentialhelper.boto3_session import (
     Pkcs11Config,
 )
 

@@ -26,7 +26,7 @@ except ImportError:
     raise SystemExit(dedent(message)) from None
 
 
-package = "awsiot_credential_helper"
+package = "awsiot_credentialhelper"
 python_versions = ["3.11", "3.10", "3.9", "3.8"]
 nox.needs_version = ">= 2021.6.6"
 nox.options.sessions = (
@@ -268,7 +268,7 @@ def hsm_linux(session: Session) -> None:
     # Copy wheel to docker directory
     session.run(
         "cp",
-        "dist/awsiot_credential_helper-0.0.0-py3-none-any.whl",
+        "dist/awsiot_credentialhelper-0.0.0-py3-none-any.whl",
         "docker/hsm_linux",
         external=True,
     )
