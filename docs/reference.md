@@ -1,8 +1,8 @@
 # Reference
 
-## awsiot_credential_helper
+## awsiot_credentialhelper
 
 ```{eval-rst}
-.. automodule:: awsiot_credential_helper.boto3_session
+.. automodule:: awsiot_credentialhelper.boto3_session
    :members:
 ```

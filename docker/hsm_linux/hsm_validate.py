@@ -4,9 +4,8 @@ This code is intended to be run as a test case within a Linux environment.
 """
 from os import environ
 
-from awsiot_credentia_helper.boto3_session import Pkcs11Config
-
-import awsiot_credential_helper.boto3_session as iotcp
+import awsiot_credentialhelper.boto3_session as iotcp
+from awsiot_credentialhelper.boto3_session import Pkcs11Config
 
 
 SLOT_ID = str(environ.get("SLOT_ID"))
