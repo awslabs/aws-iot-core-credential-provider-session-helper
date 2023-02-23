@@ -62,7 +62,7 @@ iot = boto3_session.client("iot")
 result = iot.list_things()
 ```
 
-Please see the [package documentation](https://awslabs.github.io/aws-iot-core-credential-provider-session-helper) for more details and advanced use.
+Please see the [package documentation](https://awslabs.github.io/aws-iot-core-credential-provider-session-helper/) for more details and advanced use.
 
 ## Contributing
 
