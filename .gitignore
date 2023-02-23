@@ -13,3 +13,4 @@ __pycache__/
 /.build-iotcp/
 .envrc
 .tool-versions
+/docker/**/*.whl
