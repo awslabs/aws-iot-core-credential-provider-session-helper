@@ -16,6 +16,9 @@
 [pre-commit]: https://github.com/pre-commit/pre-commit
 [black]: https://github.com/psf/black
 
+> **Warning**
+> This project in **not** live yet due to a name conflict with PyPI. `pip install` will **not** wwork at this point in time. Once this message is removed, the project _will_ be live.
+
 This package provides an easy way to create a **refreshable** Boto3 Session using the [AWS IoT Core credential provider](https://docs.aws.amazon.com/iot/latest/developerguide/authorizing-direct-aws.html).
 
 ## Features
