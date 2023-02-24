@@ -94,6 +94,3 @@ This project template was generated from a fork of [@cjolowicz]'s [Hypermodern P
 
 [license]: https://github.com/awslabs/aws-iot-core-credential-provider-session-helper/blob/main/LICENSE
 [contributor guide]: https://github.com/awslabs/aws-iot-core-credential-provider-session-helper/blob/main/CONTRIBUTING.md
-[third party]: https://github.com/awslabs/aws-iot-core-credential-provider-session-helper/blob/main/THIRD-PARTY-LICENSES.txt
-[package documentation]: https://awslabs.github.io/aws-iot-core-credential-provider-session-helper
-[file an issue]: https://github.com/awslabs/aws-iot-core-credential-provider-session-helper/issues/new
