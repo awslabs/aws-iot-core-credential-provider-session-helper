@@ -18,6 +18,10 @@
 
 This package provides an easy way to create a **refreshable** Boto3 Session using the [AWS IoT Core credential provider](https://docs.aws.amazon.com/iot/latest/developerguide/authorizing-direct-aws.html).
 
+<p align="center">
+[Package documentation](https://awslabs.github.io/aws-iot-core-credential-provider-session-helper/)
+</p>
+
 ## Features
 
 - Automatic refresh of [Boto3 credentials](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html) through requests to the AWS IoT Core credential provider. No need to manage or maintain refresh times.
