@@ -1,0 +1,400 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Reference" href="reference.html" /><link rel="prev" title="Usage" href="usage.html" />
+
+    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+        <title>Advanced usage - AWS IoT Core Credential Provider Session Helper documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">AWS IoT Core Credential Provider Session Helper  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  
+  <span class="sidebar-brand-text">AWS IoT Core Credential Provider Session Helper  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Advanced Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="codeofconduct.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev_notes.html">Development Notes</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/awslabs/aws-iot-core-credential-provider-session-helper/releases">Changelog</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="advanced-usage">
+<h1>Advanced usage<a class="headerlink" href="#advanced-usage" title="Permalink to this heading">#</a></h1>
+<p>In this section, more complex uses of the session helper are described. All examples and walkthroughs will be categorized and be referable from the menu to the right.</p>
+<section id="protecting-credentials">
+<h2>Protecting credentials<a class="headerlink" href="#protecting-credentials" title="Permalink to this heading">#</a></h2>
+<p>One main tenet for devices or users outside of our control is to reduce the attack surface if or when the device is compromised. These uses cover different scenarios.</p>
+<section id="pkcs-11-on-canonical-ubuntu-walkthrough">
+<h3>PKCS#11 on Canonical Ubuntu walkthrough<a class="headerlink" href="#pkcs-11-on-canonical-ubuntu-walkthrough" title="Permalink to this heading">#</a></h3>
+<p>This walkthrough demonstrated how to use the session helper with SoftHSM. It covers how to use a private key stored within a PKCS#11 environment.</p>
+<section id="prerequisites">
+<h4>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading">#</a></h4>
+<ul class="simple">
+<li><p>AWS IoT Role Alias configured with thing, certificate, and AWS IoT policy</p></li>
+<li><p>A registered X.509 certificate and corresponding private key</p></li>
+<li><p>An Ubuntu desktop or server environment with sudo access - the walkthrough uses Ubuntu 22.04.1 LTS</p></li>
+<li><p>Python with the <code class="docutils literal notranslate"><span class="pre">awsiot-credentialhelper</span></code> installed</p></li>
+</ul>
+</section>
+<section id="steps">
+<h4>Steps<a class="headerlink" href="#steps" title="Permalink to this heading">#</a></h4>
+<ol class="arabic">
+<li><p>Login to the Ubuntu system (host system) and start a command line interface.</p></li>
+<li><p>Create a directory and copy the certificate and private key there</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mkdir<span class="w"> </span><span class="nv">$HOME</span>/hsm_test
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span><span class="nv">$HOME</span>/hsm_test
+$<span class="w"> </span>cp<span class="w"> </span>/path/to/certificate<span class="w"> </span>thing-cert.pem
+$<span class="w"> </span>cp<span class="w"> </span>/path/to/private-key<span class="w"> </span>thing-key.pem
+</pre></div>
+</div>
+</li>
+<li><p>Install dependencies, SoftHSM2, initialize and record slot number</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>apt<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>softhsm2<span class="w"> </span>pcregrep<span class="w"> </span>opensc<span class="w"> </span>gnutls-bin
+$<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="nv">$HOME</span>/lib/softhsm/tokens
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span><span class="nv">$HOME</span>/lib/softhsm/
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;directories.tokendir = </span><span class="nv">$PWD</span><span class="s2">/tokens&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>softhsm2.conf
+$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">SOFTHSM2_CONF</span><span class="o">=</span><span class="nv">$HOME</span>/lib/softhsm/softhsm2.conf
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span><span class="nv">$HOME</span>/hsm_test
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="k">$(</span>softhsm2-util<span class="w"> </span>--init-token<span class="w"> </span>--free<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--so-pin<span class="w"> </span><span class="m">1234</span><span class="w"> </span>--pin<span class="w"> </span><span class="m">1234</span><span class="w"> </span>--label<span class="w"> </span>hsm_thing<span class="p">|</span>pcregrep<span class="w"> </span>-o1<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s1">&#39;.* to slot (.*)&#39;</span><span class="k">)</span><span class="w"> </span>&gt;<span class="w"> </span>slot.txt
+</pre></div>
+</div>
+</li>
+<li><p>Verify the private key is in PKCS#8 format. This the first major challenge in getting keys into the right format. SoftHSM2 will alert if the key is not in the correct format.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="c1"># Covert PCKS#1 (--BEGIN RSA PRIVATE KEY--) to PKCS#8 (--BEGIN PRIVATE KEY--)</span>
+$<span class="w"> </span>mv<span class="w"> </span>thing-key.pem<span class="w"> </span>thing-key-pkcs1.pem
+$<span class="w"> </span>openssl<span class="w"> </span>pkcs8<span class="w"> </span>-in<span class="w"> </span>thing-key-pkcs1.pem<span class="w"> </span>-topk8<span class="w"> </span>-nocrypt<span class="w"> </span>-out<span class="w"> </span>thing-key.pem
+</pre></div>
+</div>
+</li>
+<li><p>Import the private key into newly initialized slot and verify content.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>softhsm2-util<span class="w"> </span>--import<span class="w"> </span>thing-key.pem<span class="w"> </span>--slot<span class="w"> </span><span class="k">$(</span>cat<span class="w"> </span>slot.txt<span class="k">)</span><span class="w"> </span>--label<span class="w"> </span>hsm_thing_key<span class="w"> </span><span class="se">\</span>
+--id<span class="w"> </span><span class="m">0000</span><span class="w"> </span>--pin<span class="w"> </span><span class="m">1234</span>
+The<span class="w"> </span>key<span class="w"> </span>pair<span class="w"> </span>has<span class="w"> </span>been<span class="w"> </span>imported.
+$<span class="w"> </span>p11-tool<span class="w"> </span>--list-tokens
+<span class="w"> </span>Token<span class="w"> </span><span class="m">0</span>:
+<span class="w">     </span>URL:<span class="w"> </span>pkcs11:model<span class="o">=</span>p11-kit-trust<span class="p">;</span><span class="nv">manufacturer</span><span class="o">=</span>PKCS%2311%20Kit<span class="p">;</span><span class="nv">serial</span><span class="o">=</span><span class="m">1</span><span class="p">;</span><span class="nv">token</span><span class="o">=</span>System%20Trust
+<span class="w">     </span>Label:<span class="w"> </span>System<span class="w"> </span>Trust
+<span class="w">     </span>Type:<span class="w"> </span>Trust<span class="w"> </span>module
+<span class="w">     </span>Flags:<span class="w"> </span>uPIN<span class="w"> </span>uninitialized
+<span class="w">     </span>Manufacturer:<span class="w"> </span>PKCS#11<span class="w"> </span>Kit
+<span class="w">     </span>Model:<span class="w"> </span>p11-kit-trust
+<span class="w">     </span>Serial:<span class="w"> </span><span class="m">1</span>
+<span class="w">     </span>Module:<span class="w"> </span>p11-kit-trust.so
+
+
+<span class="w"> </span>Token<span class="w"> </span><span class="m">1</span>:
+<span class="w">     </span>URL:<span class="w"> </span>pkcs11:model<span class="o">=</span>SoftHSM%20v2<span class="p">;</span><span class="nv">manufacturer</span><span class="o">=</span>SoftHSM%20project<span class="p">;</span><span class="nv">serial</span><span class="o">=</span>050524a5fd9dec1d<span class="p">;</span><span class="nv">token</span><span class="o">=</span>hsm_thing
+<span class="w">     </span>Label:<span class="w"> </span>hsm_thing
+<span class="w">     </span>Type:<span class="w"> </span>Generic<span class="w"> </span>token
+<span class="w">     </span>Flags:<span class="w"> </span>RNG,<span class="w"> </span>Requires<span class="w"> </span>login
+<span class="w">     </span>Manufacturer:<span class="w"> </span>SoftHSM<span class="w"> </span>project
+<span class="w">     </span>Model:<span class="w"> </span>SoftHSM<span class="w"> </span>v2
+<span class="w">     </span>Serial:<span class="w"> </span>050524a5fd9dec1d
+<span class="w">     </span>Module:<span class="w"> </span>/usr/lib/x86_64-linux-gnu/softhsm/libsofthsm2.so
+</pre></div>
+</div>
+</li>
+<li><p>Create a Python file with the follow code (<code class="docutils literal notranslate"><span class="pre">pkcs11.py</span></code>), replacing the <code class="docutils literal notranslate"><span class="pre">endpoint</span></code>, <code class="docutils literal notranslate"><span class="pre">role_alias</span></code>, and <code class="docutils literal notranslate"><span class="pre">thing_name</span></code> values. The <code class="docutils literal notranslate"><span class="pre">pkcs11</span></code> entry uses values for the imported key.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">awsiot_credentialhelper.boto3_session</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Boto3SessionProvider</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">awsiot_credentialhelper.boto3_session</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Pkcs11Config</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="c1"># from awscrt.io import LogLevel</span>
+
+<span class="n">boto3_session</span> <span class="o">=</span> <span class="n">Boto3SessionProvider</span><span class="p">(</span>
+    <span class="n">endpoint</span><span class="o">=</span><span class="s2">&quot;YOUR_ENDPOINT.credentials.iot.REGION.amazonaws.com&quot;</span><span class="p">,</span>
+    <span class="n">role_alias</span><span class="o">=</span><span class="s2">&quot;YOUR_ROLE_ALIAS&quot;</span><span class="p">,</span>
+    <span class="n">certificate</span><span class="o">=</span><span class="s2">&quot;thing-cert.pem&quot;</span><span class="p">,</span>
+    <span class="n">thing_name</span><span class="o">=</span><span class="s2">&quot;YOUR_THING_NAME&quot;</span><span class="p">,</span>
+    <span class="n">pkcs11</span><span class="o">=</span><span class="n">Pkcs11Config</span><span class="p">(</span>
+        <span class="n">pkcs11_lib</span><span class="o">=</span><span class="s2">&quot;/usr/lib/softhsm/libsofthsm2.so&quot;</span><span class="p">,</span>
+        <span class="n">user_pin</span><span class="o">=</span><span class="s2">&quot;1234&quot;</span><span class="p">,</span>
+        <span class="n">token_label</span><span class="o">=</span><span class="s2">&quot;hsm_thing&quot;</span><span class="p">,</span>
+        <span class="n">private_key_label</span><span class="o">=</span><span class="s2">&quot;hsm_thing_key&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="c1"># awscrt_log_level=LogLevel.Trace,</span>
+<span class="p">)</span><span class="o">.</span><span class="n">get_session</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">boto3_session</span><span class="o">.</span><span class="n">client</span><span class="p">(</span><span class="s2">&quot;sts&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get_caller_identity</span><span class="p">())</span>
+</pre></div>
+</div>
+</li>
+<li><p>Test the code by running and verifying a response.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python3<span class="w"> </span>pkcs11.py
+<span class="o">{</span><span class="s1">&#39;UserId&#39;</span>:<span class="w"> </span><span class="s1">&#39;AROA...F3D:4686...0a0d&#39;</span>,<span class="w"> </span><span class="s1">&#39;Account&#39;</span>:<span class="w"> </span><span class="s1">&#39;1234567890&#39;</span>,<span class="w"> </span><span class="s1">&#39;Arn&#39;</span>:<span class="w"> </span><span class="s1">&#39;arn:aws:sts::1234567890:assumed-role/test_iot_role_alias/4686...0a0d&#39;</span>,<span class="w"> </span><span class="s1">&#39;ResponseMetadata&#39;</span>:<span class="w"> </span><span class="o">{</span><span class="s1">&#39;RequestId&#39;</span>:<span class="w"> </span><span class="s1">&#39;d6598737-9b63-4dd2-a0d3-cdf3a719bb39&#39;</span>,<span class="w"> </span><span class="s1">&#39;HTTPStatusCode&#39;</span>:<span class="w"> </span><span class="m">200</span>,<span class="w"> </span><span class="s1">&#39;HTTPHeaders&#39;</span>:<span class="w"> </span><span class="o">{</span><span class="s1">&#39;x-amzn-requestid&#39;</span>:<span class="w"> </span><span class="s1">&#39;d6598737-9b63-4dd2-a0d3-cdf3a719bb39&#39;</span>,<span class="w"> </span><span class="s1">&#39;content-type&#39;</span>:<span class="w"> </span><span class="s1">&#39;text/xml&#39;</span>,<span class="w"> </span><span class="s1">&#39;content-length&#39;</span>:<span class="w"> </span><span class="s1">&#39;554&#39;</span>,<span class="w"> </span><span class="s1">&#39;date&#39;</span>:<span class="w"> </span><span class="s1">&#39;Fri, 24 Feb 2023 23:36:50 GMT&#39;</span><span class="o">}</span>,<span class="w"> </span><span class="s1">&#39;RetryAttempts&#39;</span>:<span class="w"> </span><span class="m">0</span><span class="o">}}</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>That confirms that the session helper used the SoftHSM2 to perform the cryptographic operations. This walkthrough doesn’t cover the nuances of PKCS#11–there are many! However, if you uncomment the <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">awscrt.io</span></code> and <code class="docutils literal notranslate"><span class="pre">awscrt_log_level</span></code> lines, this will provide details on what the awscrt runtime is doing.</p>
+</section>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="reference.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Reference</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="usage.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Usage</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; Copyright Amazon.com Inc. or its affiliates.
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Advanced usage</a><ul>
+<li><a class="reference internal" href="#protecting-credentials">Protecting credentials</a><ul>
+<li><a class="reference internal" href="#pkcs-11-on-canonical-ubuntu-walkthrough">PKCS#11 on Canonical Ubuntu walkthrough</a><ul>
+<li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li><a class="reference internal" href="#steps">Steps</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/scripts/furo.js"></script>
+    </body>
+</html>

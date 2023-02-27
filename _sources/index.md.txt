@@ -8,6 +8,7 @@ end-before: <!-- github-only -->
 [contributor guide]: contributing
 [command-line reference]: usage
 [developer notes]: dev_notes
+[advanced]: advanced
 
 ```{toctree}
 ---
@@ -16,6 +17,7 @@ maxdepth: 1
 ---
 
 usage
+Advanced Usage <advanced>
 reference
 contributing
 Code of Conduct <codeofconduct>
