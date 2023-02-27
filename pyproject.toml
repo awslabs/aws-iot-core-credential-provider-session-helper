@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 [tool.poetry]
 name = "awsiot-credentialhelper"
-version = "0.2.0"
+version = "0.2.1"
 description = "AWS IoT Core Credential Provider Session Helper"
 authors = ["Gavin Adams <gavinaws@amazon.com>"]
 license = "Apache-2.0"
@@ -11,7 +11,7 @@ homepage = "https://github.com/awslabs/aws-iot-core-credential-provider-session-
 repository = "https://github.com/awslabs/aws-iot-core-credential-provider-session-helper"
 documentation = "https://aws-iot-core-credential-provider-session-helper.readthedocs.io"
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 4 - Beta",
 ]
 
 [tool.poetry.urls]
