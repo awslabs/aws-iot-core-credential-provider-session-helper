@@ -178,6 +178,7 @@ def tests(session: Session) -> None:
         "pytest_httpserver",
         "trustme",
         "coverage-conditional-plugin",
+        "cryptography",
     )
     try:
         session.run("coverage", "run", "--parallel", "-m", "pytest", *session.posargs)
