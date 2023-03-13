@@ -77,7 +77,6 @@ def ca():
 @pytest.fixture(scope="session")
 def httpserver_ssl_context(ca):
     """Create an HTTPS server with the CA certificate."""
-
     # For crypto testing, each OS has difference nuances.
     if os_type == "Linux":  # pragma: no cover
         context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)

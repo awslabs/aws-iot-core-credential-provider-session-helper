@@ -19,6 +19,7 @@ import trustme
 from awsiot_credentialhelper.boto3_session import Boto3SessionProvider
 from awsiot_credentialhelper.boto3_session import Pkcs11Config
 
+
 # Create temporary self-signed certificates for testing. Note: these are crafted
 # to test various operating systems, so are explicitly defined with non-standard
 # values/subjects.
@@ -61,6 +62,8 @@ def httpserver_ssl_context(ca):
     context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
 
     # For crypto testing, each OS has difference nuances.
+    # For PKCS#11, these _probably_ are not used, and are different
+    # than those used in file_based
     if os_type == "Linux":  # pragma: no cover
         context.verify_mode = ssl.CERT_REQUIRED
     else:  # pragma: no cover
