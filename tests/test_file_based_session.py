@@ -37,6 +37,8 @@ EC_CERTIFICATE_FILE = tempfile.NamedTemporaryFile(delete=False)
 EC_PRIVATE_KEY_FILE = tempfile.NamedTemporaryFile(delete=False)
 EC_CERTIFICATE_FILE.write(certificate)
 EC_PRIVATE_KEY_FILE.write(private_key)
+EC_CERTIFICATE_FILE.close()
+EC_PRIVATE_KEY_FILE.close()
 
 cert_bytes = b"cert bytes"
 key_bytes = b"key bytes"
@@ -75,18 +77,17 @@ def ca():
 @pytest.fixture(scope="session")
 def httpserver_ssl_context(ca):
     """Create an HTTPS server with the CA certificate."""
+    context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+
     # For crypto testing, each OS has difference nuances.
     if os_type == "Linux":  # pragma: no cover
-        print("got here")
-        context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
         context.verify_mode = ssl.CERT_REQUIRED
-        # Load the test certificate for mTLS verification
-        context.load_verify_locations(cafile=cert_file.name)
     else:  # pragma: no cover
         # macOS and Windows work without server requesting cert
-        # context.verify_mode = ssl.CERT_NONE
-        context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-
+        context.verify_mode = ssl.CERT_NONE
+        # context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+    # Load the test certificate for mTLS verification
+    context.load_verify_locations(cafile=RSA_CERTIFICATE_FILE.name)
     localhost_cert = ca.issue_cert(
         "localhost",
         "127.0.0.1",
