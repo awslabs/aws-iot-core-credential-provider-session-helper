@@ -9,7 +9,9 @@ import datetime
 import os
 import platform
 import ssl
+import tempfile
 
+import certificates
 import pytest
 import pytest_httpserver
 import trustme
@@ -18,6 +20,23 @@ from botocore.exceptions import ClientError
 
 from awsiot_credentialhelper.boto3_session import Boto3SessionProvider
 
+
+# Create temporary self-signed certificates for testing. Note: these are crafted
+# to test various operating systems, so are explicitly defined with non-standard
+# values/subjects.
+certificate, private_key = certificates.generate_selfsigned_rsa2048_cert()
+RSA_CERTIFICATE_FILE = tempfile.NamedTemporaryFile(delete=False)
+RSA_PRIVATE_KEY_FILE = tempfile.NamedTemporaryFile(delete=False)
+RSA_CERTIFICATE_FILE.write(certificate)
+RSA_PRIVATE_KEY_FILE.write(private_key)
+RSA_CERTIFICATE_FILE.close()
+RSA_PRIVATE_KEY_FILE.close()
+
+certificate, private_key = certificates.generate_selfsigned_ec256_cert()
+EC_CERTIFICATE_FILE = tempfile.NamedTemporaryFile(delete=False)
+EC_PRIVATE_KEY_FILE = tempfile.NamedTemporaryFile(delete=False)
+EC_CERTIFICATE_FILE.write(certificate)
+EC_PRIVATE_KEY_FILE.write(private_key)
 
 cert_bytes = b"cert bytes"
 key_bytes = b"key bytes"
@@ -34,9 +53,11 @@ else:
     server_endpoint = "localhost"
 os_type = platform.system()
 if os_type == "Linux":  # pragma: no cover
-    file_prefix = "client_ec256"
+    cert_file = EC_CERTIFICATE_FILE
+    key_file = EC_PRIVATE_KEY_FILE
 else:  # pragma: no cover
-    file_prefix = "client_rsa2048"
+    cert_file = RSA_CERTIFICATE_FILE
+    key_file = RSA_PRIVATE_KEY_FILE
 
 
 @pytest.fixture(scope="session")
@@ -60,7 +81,7 @@ def httpserver_ssl_context(ca):
         context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
         context.verify_mode = ssl.CERT_REQUIRED
         # Load the test certificate for mTLS verification
-        context.load_verify_locations(cafile=f"tests/assets/{file_prefix}.pem")
+        context.load_verify_locations(cafile=cert_file.name)
     else:  # pragma: no cover
         # macOS and Windows work without server requesting cert
         # context.verify_mode = ssl.CERT_NONE
@@ -80,8 +101,10 @@ def test_get_session_with_files() -> None:
     session = Boto3SessionProvider(
         endpoint="my_endpoint.credentials.iot.us-west-2.amazonaws.com",
         role_alias="iot_role_alias",
-        certificate=f"tests/assets/{file_prefix}.pem",
-        private_key=f"tests/assets/{file_prefix}.key",
+        # certificate=f"tests/assets/{file_prefix}.pem",
+        # private_key=f"tests/assets/{file_prefix}.key",
+        certificate=cert_file.name,
+        private_key=key_file.name,
         thing_name="my_iot_thing_name",
         awscrt_log_level=LogLevel.NoLogs,
     )
@@ -113,8 +136,10 @@ def test_session_with_invalid_credentials() -> None:
         Boto3SessionProvider(
             endpoint="cicd_testing.credentials.iot.us-west-2.amazonaws.com",
             role_alias="iot_role_alias",
-            certificate=f"tests/assets/{file_prefix}.pem",
-            private_key=f"tests/assets/{file_prefix}.key",
+            # certificate=f"tests/assets/{file_prefix}.pem",
+            # private_key=f"tests/assets/{file_prefix}.key",
+            certificate=cert_file.name,
+            private_key=key_file.name,
             thing_name="my_iot_thing_name",
             # awscrt_log_level=LogLevel.Trace,
         ).get_session().client("sts").get_caller_identity()
@@ -138,8 +163,10 @@ def test_valid_credentials(
     session = Boto3SessionProvider(
         endpoint=endpoint,
         role_alias="iot_role_alias",
-        certificate=f"tests/assets/{file_prefix}.pem",
-        private_key=f"tests/assets/{file_prefix}.key",
+        # certificate=f"tests/assets/{file_prefix}.pem",
+        # private_key=f"tests/assets/{file_prefix}.key",
+        certificate=cert_file.name,
+        private_key=key_file.name,
         thing_name="my_iot_thing_name",
         ca=ca.cert_pem.bytes(),
         verify_peer=False,
@@ -176,8 +203,10 @@ def test_invalid_credentials(
     session = Boto3SessionProvider(
         endpoint=endpoint,
         role_alias="iot_role_alias",
-        certificate=f"tests/assets/{file_prefix}.pem",
-        private_key=f"tests/assets/{file_prefix}.key",
+        # certificate=f"tests/assets/{file_prefix}.pem",
+        # private_key=f"tests/assets/{file_prefix}.key",
+        certificate=cert_file.name,
+        private_key=key_file.name,
         thing_name="my_iot_thing_name",
         ca=ca.cert_pem.bytes(),
     ).get_session()
