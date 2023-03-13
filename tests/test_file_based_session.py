@@ -142,7 +142,7 @@ def test_session_with_invalid_credentials() -> None:
             certificate=cert_file.name,
             private_key=key_file.name,
             thing_name="my_iot_thing_name",
-            # awscrt_log_level=LogLevel.Trace,
+            awscrt_log_level=LogLevel.Trace,
         ).get_session().client("sts").get_caller_identity()
 
 
