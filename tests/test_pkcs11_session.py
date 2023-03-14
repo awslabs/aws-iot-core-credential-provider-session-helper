@@ -9,7 +9,9 @@ import datetime
 import os
 import platform
 import ssl
+import tempfile
 
+import certificates
 import pytest
 import pytest_httpserver
 import trustme
@@ -17,6 +19,17 @@ import trustme
 from awsiot_credentialhelper.boto3_session import Boto3SessionProvider
 from awsiot_credentialhelper.boto3_session import Pkcs11Config
 
+
+# Create temporary self-signed certificates for testing. Note: these are crafted
+# to test various operating systems, so are explicitly defined with non-standard
+# values/subjects.
+certificate, private_key = certificates.generate_selfsigned_rsa2048_cert()
+RSA_CERTIFICATE_FILE = tempfile.NamedTemporaryFile(delete=False)
+RSA_PRIVATE_KEY_FILE = tempfile.NamedTemporaryFile(delete=False)
+RSA_CERTIFICATE_FILE.write(certificate)
+RSA_PRIVATE_KEY_FILE.write(private_key)
+RSA_CERTIFICATE_FILE.close()
+RSA_PRIVATE_KEY_FILE.close()
 
 if "GITHUB_RUNNER" in os.environ:
     if os.environ["GITHUB_RUNNER"] == "ubuntu-latest":  # pragma: no cover
@@ -49,13 +62,15 @@ def httpserver_ssl_context(ca):
     context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
 
     # For crypto testing, each OS has difference nuances.
+    # For PKCS#11, these _probably_ are not used, and are different
+    # than those used in file_based
     if os_type == "Linux":  # pragma: no cover
         context.verify_mode = ssl.CERT_REQUIRED
     else:  # pragma: no cover
         # macOS and Windows work without server requesting cert
         context.verify_mode = ssl.CERT_NONE
     # Load the test certificate for mTLS verification
-    context.load_verify_locations(cafile="tests/assets/client_rsa2048.pem")
+    context.load_verify_locations(cafile=RSA_CERTIFICATE_FILE.name)
     localhost_cert = ca.issue_cert(
         "localhost",
         "127.0.0.1",
@@ -75,7 +90,7 @@ def test_privatekey_pkcs_mutually_excluded() -> None:
         Boto3SessionProvider(
             endpoint="localhost:8888",
             role_alias="iot_role_alias",
-            certificate="tests/assets/client_rsa2048.pem",
+            certificate=RSA_CERTIFICATE_FILE.name,
             thing_name="my_iot_thing_name",
             verify_peer=False,
         ).get_session()
@@ -93,8 +108,8 @@ def test_privatekey_pkcs_mutually_excluded() -> None:
         Boto3SessionProvider(
             endpoint="localhost:8888",
             role_alias="iot_role_alias",
-            certificate="tests/assets/client_rsa2048.pem",
-            private_key="tests/assets/client_rsa2048.key",
+            certificate=RSA_CERTIFICATE_FILE.name,
+            private_key=RSA_PRIVATE_KEY_FILE.name,
             thing_name="my_iot_thing_name",
             pkcs11=pkcs11_obj,
         ).get_session()
@@ -109,7 +124,7 @@ def test_missing_pkcs_lib() -> None:
         Boto3SessionProvider(
             endpoint="localhost:8888",
             role_alias="iot_role_alias",
-            certificate="tests/assets/client_rsa2048.pem",
+            certificate=RSA_CERTIFICATE_FILE.name,
             thing_name="my_iot_thing_name",
             pkcs11=Pkcs11Config(  # type: ignore
                 # pkcs11_lib must be provided - force ignore for mypy
@@ -130,7 +145,7 @@ def test_invalid_pkcs_lib() -> None:
         Boto3SessionProvider(
             endpoint="localhost:8888",
             role_alias="iot_role_alias",
-            certificate="tests/assets/client_rsa2048.pem",
+            certificate=RSA_CERTIFICATE_FILE.name,
             thing_name="my_iot_thing_name",
             pkcs11=Pkcs11Config(
                 pkcs11_lib=file_path,
@@ -145,7 +160,7 @@ def test_missing_user_pin() -> None:
     Boto3SessionProvider(
         endpoint="localhost:8888",
         role_alias="iot_role_alias",
-        certificate="tests/assets/client_rsa2048.pem",
+        certificate=RSA_CERTIFICATE_FILE.name,
         thing_name="my_iot_thing_name",
         pkcs11=Pkcs11Config(
             pkcs11_lib="tests/assets/fake_pkcs11_module.so",
@@ -168,7 +183,7 @@ def test_full_pkcs11_config(
     session = Boto3SessionProvider(
         endpoint="localhost:8888",
         role_alias="iot_role_alias",
-        certificate="tests/assets/client_rsa2048.pem",
+        certificate=RSA_CERTIFICATE_FILE.name,
         thing_name="my_iot_thing_name",
         pkcs11=Pkcs11Config(  # noqa: S106
             pkcs11_lib="tests/assets/fake_pkcs11_module.so",
