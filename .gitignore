@@ -14,3 +14,7 @@ __pycache__/
 .envrc
 .tool-versions
 /docker/**/*.whl
+# Ephemeral testing credentials
+tests/assets/*.key
+tests/assets/*.pem
+.vscode/launch.json

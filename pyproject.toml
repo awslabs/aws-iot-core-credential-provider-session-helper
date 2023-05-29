@@ -57,12 +57,13 @@ coverage-conditional-plugin = "^0.8.0"
 
 [tool.coverage.paths]
 source = ["src", "*/site-packages"]
-tests = ["tests", "*/tests"]
+# tests = ["tests", "*/tests"]
 
 [tool.coverage.run]
 branch = true
 plugins = ["coverage_conditional_plugin"]
-source = ["awsiot_credentialhelper", "tests"]
+# source = ["awsiot_credentialhelper", "tests"]
+source = ["awsiot_credentialhelper"]
 
 [tool.coverage.coverage_conditional_plugin.rules]
 # Here we specify our pragma rules:
