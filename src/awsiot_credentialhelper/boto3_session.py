@@ -162,8 +162,6 @@ class Boto3SessionProvider:
         # Set logging level for awscrt if provided, otherwise default of no logging, just assertions
         if awscrt_log_level is not None:
             init_logging(log_level=awscrt_log_level, file_name="stdout")
-        else:
-            pass
 
         self._endpoint: str = endpoint
         self._role_alias: str = role_alias
@@ -370,8 +368,8 @@ class Boto3SessionProvider:
                 f"Error {stream_completion_result} getting credentials: {json.loads(response.body.decode())}"
             )
 
-    @staticmethod
     def _mtls_client_connection(
+        self,
         url: ParseResult,
         certificate: bytes,
         private_key: bytes,
@@ -424,8 +422,8 @@ class Boto3SessionProvider:
         except AwsCrtError as e:
             raise ValueError(f"Error completing mTLS connection: {e}") from e
 
-    @staticmethod
     def _mtls_pkcs11_client_connection(
+        self,
         url: ParseResult,
         port: int,
         certificate: bytes,
@@ -488,8 +486,7 @@ class Boto3SessionProvider:
             raise ValueError(f"Error completing mTLS connection: {e}") from e
         # ###### End coverage exclusion
 
-    @staticmethod
-    def __load_certificate(certificate: str | bytes) -> bytes:
+    def __load_certificate(self, certificate: str | bytes) -> bytes:
         """Load the certificate.
 
         Args:

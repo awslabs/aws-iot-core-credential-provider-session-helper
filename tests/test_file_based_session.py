@@ -9,7 +9,7 @@ import datetime
 import os
 import platform
 import ssl
-import tempfile
+from pathlib import Path
 
 import certificates
 import pytest
@@ -23,22 +23,32 @@ from awsiot_credentialhelper.boto3_session import Boto3SessionProvider
 
 # Create temporary self-signed certificates for testing. Note: these are crafted
 # to test various operating systems, so are explicitly defined with non-standard
-# values/subjects.
-certificate, private_key = certificates.generate_selfsigned_rsa2048_cert()
-RSA_CERTIFICATE_FILE = tempfile.NamedTemporaryFile(delete=False)
-RSA_PRIVATE_KEY_FILE = tempfile.NamedTemporaryFile(delete=False)
-RSA_CERTIFICATE_FILE.write(certificate)
-RSA_PRIVATE_KEY_FILE.write(private_key)
-RSA_CERTIFICATE_FILE.close()
-RSA_PRIVATE_KEY_FILE.close()
+# values/subjects and expiration times.
 
-certificate, private_key = certificates.generate_selfsigned_ec256_cert()
-EC_CERTIFICATE_FILE = tempfile.NamedTemporaryFile(delete=False)
-EC_PRIVATE_KEY_FILE = tempfile.NamedTemporaryFile(delete=False)
-EC_CERTIFICATE_FILE.write(certificate)
-EC_PRIVATE_KEY_FILE.write(private_key)
-EC_CERTIFICATE_FILE.close()
-EC_PRIVATE_KEY_FILE.close()
+# Files are create and stored in tests/assets and reused if they already exist. This is to
+# support development and testing on macOS where the awscrt stored certificates when first used.
+# If testing returns coverage errors, especially with reversed lines such as 120->118, open
+# Keychain Access, select the Imported Private Key of rsa2048.valid.example.com (twirl open), then
+# Get Info->Access Control->"Allow all applications to access this item".
+
+RSA_CERTIFICATE_FILE = Path("tests/assets/rsa2048.valid.example.com.pem")
+RSA_PRIVATE_KEY_FILE = Path("tests/assets/rsa2048.valid.example.com.key")
+EC_CERTIFICATE_FILE = Path("tests/assets/ec256.valid.example.com.pem")
+EC_PRIVATE_KEY_FILE = Path("tests/assets/ec256.valid.example.com.key")
+if not RSA_CERTIFICATE_FILE.exists():
+    # Generate RSA certificate and private key
+    certificate, private_key = certificates.generate_selfsigned_rsa2048_cert()
+    with open(RSA_CERTIFICATE_FILE, "w") as f:
+        f.write(certificate.decode("utf-8"))
+    with open(RSA_PRIVATE_KEY_FILE, "w") as f:
+        f.write(private_key.decode("utf-8"))
+
+    # Generate EC certificate and private key
+    certificate, private_key = certificates.generate_selfsigned_ec256_cert()
+    with open(EC_CERTIFICATE_FILE, "w") as f:
+        f.write(certificate.decode("utf-8"))
+    with open(EC_PRIVATE_KEY_FILE, "w") as f:
+        f.write(private_key.decode("utf-8"))
 
 cert_bytes = b"cert bytes"
 key_bytes = b"key bytes"
@@ -81,14 +91,10 @@ def httpserver_ssl_context(ca):
     if os_type == "Linux":  # pragma: no cover
         context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
         context.verify_mode = ssl.CERT_REQUIRED
-        context.load_verify_locations(cafile=EC_CERTIFICATE_FILE.name)
+        context.load_verify_locations(cafile=str(EC_CERTIFICATE_FILE))
     else:  # pragma: no cover
         # macOS and Windows work without server requesting cert
-        # context.verify_mode = ssl.CERT_NONE
-        # context.load_verify_locations(cafile=RSA_CERTIFICATE_FILE.name)
         context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-    # Load the test certificate for mTLS verification
-    # context.load_verify_locations(cafile=RSA_CERTIFICATE_FILE.name)
     localhost_cert = ca.issue_cert(
         "localhost",
         "127.0.0.1",
@@ -99,14 +105,12 @@ def httpserver_ssl_context(ca):
 
 
 def test_get_session_with_files() -> None:
-    """Verify session can be created, now with logging!."""
+    """Verify session can be created, now with logging check!"""
     session = Boto3SessionProvider(
         endpoint="my_endpoint.credentials.iot.us-west-2.amazonaws.com",
         role_alias="iot_role_alias",
-        # certificate=f"tests/assets/{file_prefix}.pem",
-        # private_key=f"tests/assets/{file_prefix}.key",
-        certificate=cert_file.name,
-        private_key=key_file.name,
+        certificate=str(cert_file),
+        private_key=str(key_file),
         thing_name="my_iot_thing_name",
         awscrt_log_level=LogLevel.NoLogs,
     )
@@ -140,8 +144,8 @@ def test_session_with_invalid_credentials() -> None:
             role_alias="iot_role_alias",
             # certificate=f"tests/assets/{file_prefix}.pem",
             # private_key=f"tests/assets/{file_prefix}.key",
-            certificate=cert_file.name,
-            private_key=key_file.name,
+            certificate=str(cert_file),
+            private_key=str(key_file),
             thing_name="my_iot_thing_name",
             awscrt_log_level=LogLevel.Trace,
         ).get_session().client("sts").get_caller_identity()
@@ -167,8 +171,8 @@ def test_valid_credentials(
         role_alias="iot_role_alias",
         # certificate=f"tests/assets/{file_prefix}.pem",
         # private_key=f"tests/assets/{file_prefix}.key",
-        certificate=cert_file.name,
-        private_key=key_file.name,
+        certificate=str(cert_file),
+        private_key=str(key_file),
         thing_name="my_iot_thing_name",
         ca=ca.cert_pem.bytes(),
         verify_peer=False,
@@ -207,8 +211,8 @@ def test_invalid_credentials(
         role_alias="iot_role_alias",
         # certificate=f"tests/assets/{file_prefix}.pem",
         # private_key=f"tests/assets/{file_prefix}.key",
-        certificate=cert_file.name,
-        private_key=key_file.name,
+        certificate=str(cert_file),
+        private_key=str(key_file),
         thing_name="my_iot_thing_name",
         ca=ca.cert_pem.bytes(),
     ).get_session()
