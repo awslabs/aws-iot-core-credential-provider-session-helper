@@ -127,22 +127,22 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
+          python-version: "3.10"
 
       - name: Upgrade pip
         run: |
           pip install --constraint=.github/workflows/constraints.txt pip
           pip --version
 
-      # Testing. W/O poetry fails to install
-      - name: Upgrade pip in virtual environments
-        shell: python
-        run: |
-          import os
-          import pip
+      # # Testing. W/O poetry fails to install
+      # - name: Upgrade pip in virtual environments
+      #   shell: python
+      #   run: |
+      #     import os
+      #     import pip
 
-          with open(os.environ["GITHUB_ENV"], mode="a") as io:
-              print(f"VIRTUALENV_PIP={pip.__version__}", file=io)
+      #     with open(os.environ["GITHUB_ENV"], mode="a") as io:
+      #         print(f"VIRTUALENV_PIP={pip.__version__}", file=io)
 
       - name: Install Poetry
         run: |
