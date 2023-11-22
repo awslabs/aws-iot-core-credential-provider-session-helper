@@ -45,7 +45,7 @@ jobs:
             bash -o pipefail -c "poetry version | awk '{ print \$2 }'"
 
       - name: Bump version for developmental release
-        if: "! steps.check-version.outputs.tag"
+        if: (! steps.check-version.outputs.tag)
         run: |
           poetry version patch &&
           version=$(poetry version | awk '{ print $2 }') &&
@@ -63,7 +63,7 @@ jobs:
           password: ${{ secrets.PYPI_TOKEN }}
 
       - name: Publish package on TestPyPI
-        if: "! steps.check-version.outputs.tag"
+        if: (! steps.check-version.outputs.tag)
         uses: pypa/gh-action-pypi-publish@v1.6.4
         with:
           user: __token__
