@@ -138,7 +138,11 @@ def test_session_with_invalid_credentials() -> None:
 
     Expectation: TLS session will not complete.
     """
-    with pytest.raises(ValueError, match="Error completing mTLS connection"):
+    with pytest.raises(
+        ValueError,
+        match="Error completing mTLS connection to endpoint "
+        + "cicd_testing.credentials.iot.us-west-2.amazonaws.com",
+    ):
         Boto3SessionProvider(
             endpoint="cicd_testing.credentials.iot.us-west-2.amazonaws.com",
             role_alias="iot_role_alias",

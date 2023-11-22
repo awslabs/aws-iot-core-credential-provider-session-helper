@@ -420,7 +420,9 @@ class Boto3SessionProvider:
             )
             return connection_future.result(10)
         except AwsCrtError as e:
-            raise ValueError(f"Error completing mTLS connection: {e}") from e
+            raise ValueError(
+                f"Error completing mTLS connection to endpoint {url.hostname}: {e}"
+            ) from e
 
     def _mtls_pkcs11_client_connection(
         self,
