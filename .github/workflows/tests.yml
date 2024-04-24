@@ -63,6 +63,8 @@ jobs:
           if [ ${{ matrix.os }} == 'ubuntu-latest' ]; then
             pipx install --pip-args=--constraint=/home/runner/work/aws-iot-core-credential-provider-session-helper/aws-iot-core-credential-provider-session-helper/.github/workflows/poetry-constraints.txt poetry
           else
+            pwd
+            ls
             pipx install --pip-args=--constraint=.github/workflows/poetry-constraints.txt poetry
           fi
           poetry --version
