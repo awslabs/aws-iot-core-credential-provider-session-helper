@@ -60,13 +60,22 @@ jobs:
 
       - name: Install Poetry
         run: |
-          pipx install --pip-args=--constraint=/home/runner/work/aws-iot-core-credential-provider-session-helper/aws-iot-core-credential-provider-session-helper/.github/workflows/poetry-constraints.txt poetry
+          if [ ${{ matrix.os }} == 'ubuntu-latest' ]; then
+            pipx install --pip-args=--constraint=/home/runner/work/aws-iot-core-credential-provider-session-helper/aws-iot-core-credential-provider-session-helper/.github/workflows/poetry-constraints.txt poetry
+          else
+            pipx install --pip-args=--constraint=.github/workflows/poetry-constraints.txt poetry
+          fi
           poetry --version
 
       - name: Install Nox
         run: |
-          pipx install --pip-args=--constraint=/home/runner/work/aws-iot-core-credential-provider-session-helper/aws-iot-core-credential-provider-session-helper/.github/workflows/constraints.txt nox
-          pipx inject --pip-args=--constraint=/home/runner/work/aws-iot-core-credential-provider-session-helper/aws-iot-core-credential-provider-session-helper/.github/workflows/constraints.txt nox nox-poetry
+          if [ ${{ matrix.os }} == 'ubuntu-latest' ]; then
+            pipx install --pip-args=--constraint=/home/runner/work/aws-iot-core-credential-provider-session-helper/aws-iot-core-credential-provider-session-helper/.github/workflows/constraints.txt nox
+            pipx inject --pip-args=--constraint=/home/runner/work/aws-iot-core-credential-provider-session-helper/aws-iot-core-credential-provider-session-helper/.github/workflows/constraints.txt nox nox-poetry
+          else
+            pipx install --pip-args=--constraint=.github/workflows/constraints.txt nox
+            pipx inject --pip-args=--constraint=.github/workflows/constraints.txt nox nox-poetry
+          fi
           nox --version
 
       - name: Compute pre-commit cache key
@@ -154,13 +163,22 @@ jobs:
 
       - name: Install Poetry
         run: |
-          pipx install --pip-args=--constraint=/home/runner/work/aws-iot-core-credential-provider-session-helper/aws-iot-core-credential-provider-session-helper/.github/workflows/poetry-constraints.txt poetry
+          if [ ${{ matrix.os }} == 'ubuntu-latest' ]; then
+            pipx install --pip-args=--constraint=/home/runner/work/aws-iot-core-credential-provider-session-helper/aws-iot-core-credential-provider-session-helper/.github/workflows/poetry-constraints.txt poetry
+          else
+            pipx install --pip-args=--constraint=.github/workflows/poetry-constraints.txt poetry
+          fi
           poetry --version
 
       - name: Install Nox
         run: |
-          pipx install --pip-args=--constraint=/home/runner/work/aws-iot-core-credential-provider-session-helper/aws-iot-core-credential-provider-session-helper/.github/workflows/constraints.txt nox
-          pipx inject --pip-args=--constraint=/home/runner/work/aws-iot-core-credential-provider-session-helper/aws-iot-core-credential-provider-session-helper/.github/workflows/constraints.txt nox nox-poetry
+          if [ ${{ matrix.os }} == 'ubuntu-latest' ]; then
+            pipx install --pip-args=--constraint=/home/runner/work/aws-iot-core-credential-provider-session-helper/aws-iot-core-credential-provider-session-helper/.github/workflows/constraints.txt nox
+            pipx inject --pip-args=--constraint=/home/runner/work/aws-iot-core-credential-provider-session-helper/aws-iot-core-credential-provider-session-helper/.github/workflows/constraints.txt nox nox-poetry
+          else
+            pipx install --pip-args=--constraint=.github/workflows/constraints.txt nox
+            pipx inject --pip-args=--constraint=.github/workflows/constraints.txt nox nox-poetry
+          fi
           nox --version
 
       - name: Download coverage data
