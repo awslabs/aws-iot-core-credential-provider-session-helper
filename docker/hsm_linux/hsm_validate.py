@@ -2,6 +2,7 @@
 
 This code is intended to be run as a test case within a Linux environment.
 """
+
 from os import environ
 
 import awsiot_credentialhelper.boto3_session as iotcp

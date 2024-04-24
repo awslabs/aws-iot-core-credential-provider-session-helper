@@ -1,4 +1,5 @@
 """Sphinx configuration."""
+
 project = "AWS IoT Core Credential Provider Session Helper"
 author = "Gavin Adams"
 copyright = "Copyright Amazon.com Inc. or its affiliates."
