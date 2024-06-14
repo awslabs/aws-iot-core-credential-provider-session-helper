@@ -11,8 +11,6 @@ __pycache__/
 /temp/
 # Local development (asdf/direnv)
 /.build-iotcp/
-.envrc
-.tool-versions
 /docker/**/*.whl
 # Ephemeral testing credentials
 tests/assets/*.key
