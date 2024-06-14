@@ -38,10 +38,26 @@ Then for each combination of resources:
 
 | Thing | IoT Policy | IoT Policy Permissions | IoT Role Alias | IAM Role | Role Alias Duration <= IAM Role | Status Code | Response Body                                                                                                                 |
 | :---: | :--------: | :--------------------: | :------------: | :------: | :-----------------------------: | :---------: | ----------------------------------------------------------------------------------------------------------------------------- |
-|  ❌   |     ❌     |           ❌           |       ❌       |    ❌    |               ❌                |     403     | `{"message":"Invalid thing name passed"}`                                                                                     |
-|  ❌   |     ✅     |           ❌           |       ❌       |    ❌    |               ❌                |     403     | `{"message":"Invalid thing name passed"}`                                                                                     |
-|  ✅   |     ✅     |           ❌           |       ❌       |    ❌    |               ❌                |     403     | `{"message":"Access Denied"}`                                                                                                 |
-|  ✅   |     ✅     |           ✅           |       ❌       |    ❌    |               ❌                |     404     | `{"message":"Role alias does not exist"}`                                                                                     |
-|  ✅   |     ✅     |           ✅           |       ✅       |    ❌    |               ❌                |     400     | `{"message":"Unable to assume the role, or the role to assume does not exist"}`                                               |
-|  ✅   |     ✅     |           ✅           |       ✅       |    ✅    |               ❌                |     400     | `{"message":"The requested CredentialDurationSeconds exceeds the MaxSessionDuration set for the role"}`                       |
-|  ✅   |     ✅     |           ✅           |       ✅       |    ✅    |               ✅                |     200     | `{"credentials":{"accessKeyId":"A..4","secretAccessKey":"0..h","sessionToken":"I..Q==","expiration":"2023-02-06T05:54:46Z"}}` |
+|   ❌   |     ❌      |           ❌            |       ❌        |    ❌     |                ❌                |     403     | `{"message":"Invalid thing name passed"}`                                                                                     |
+|   ❌   |     ✅      |           ❌            |       ❌        |    ❌     |                ❌                |     403     | `{"message":"Invalid thing name passed"}`                                                                                     |
+|   ✅   |     ✅      |           ❌            |       ❌        |    ❌     |                ❌                |     403     | `{"message":"Access Denied"}`                                                                                                 |
+|   ✅   |     ✅      |           ✅            |       ❌        |    ❌     |                ❌                |     404     | `{"message":"Role alias does not exist"}`                                                                                     |
+|   ✅   |     ✅      |           ✅            |       ✅        |    ❌     |                ❌                |     400     | `{"message":"Unable to assume the role, or the role to assume does not exist"}`                                               |
+|   ✅   |     ✅      |           ✅            |       ✅        |    ✅     |                ❌                |     400     | `{"message":"The requested CredentialDurationSeconds exceeds the MaxSessionDuration set for the role"}`                       |
+|   ✅   |     ✅      |           ✅            |       ✅        |    ✅     |                ✅                |     200     | `{"credentials":{"accessKeyId":"A..4","secretAccessKey":"0..h","sessionToken":"I..Q==","expiration":"2023-02-06T05:54:46Z"}}` |
+
+## Local building and testing
+
+The [Hypermodern Python Cookiercutter](https://cookiecutter-hypermodern-python.readthedocs.io/en/2022.6.3.post1/) documentation provides a good starting point. As this package supports various versions of Python to test and build against, the approach taken by the authors is to use [asdf](https://asdf-vm.com/) and [direnv](https://direnv.net/). The included `.envrc` and `.tool-versions` files contain the steps to locally create a virtualenv and reference locally installed Python versions.
+
+The steps are (namely for me to remember!):
+
+1. Fork and clone the repository
+2. Ensure `asdf` and `direnv` are installed
+3. Create a new local _direnv_ via `direnv allow`, normally with the most recent version of Python
+4. Install build/text tools: `pip install poetry nox nox-poetry`
+5. `poetry update && poetry install`
+6. Perform updates
+7. `nox` (will run all sessions)
+
+Once completed, commit the changes, verify the actions run in GitHub, then pefrom a pull request against the main repo.
