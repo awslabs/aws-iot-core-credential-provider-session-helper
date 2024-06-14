@@ -38,13 +38,13 @@ Then for each combination of resources:
 
 | Thing | IoT Policy | IoT Policy Permissions | IoT Role Alias | IAM Role | Role Alias Duration <= IAM Role | Status Code | Response Body                                                                                                                 |
 | :---: | :--------: | :--------------------: | :------------: | :------: | :-----------------------------: | :---------: | ----------------------------------------------------------------------------------------------------------------------------- |
-|   ❌   |     ❌      |           ❌            |       ❌        |    ❌     |                ❌                |     403     | `{"message":"Invalid thing name passed"}`                                                                                     |
-|   ❌   |     ✅      |           ❌            |       ❌        |    ❌     |                ❌                |     403     | `{"message":"Invalid thing name passed"}`                                                                                     |
-|   ✅   |     ✅      |           ❌            |       ❌        |    ❌     |                ❌                |     403     | `{"message":"Access Denied"}`                                                                                                 |
-|   ✅   |     ✅      |           ✅            |       ❌        |    ❌     |                ❌                |     404     | `{"message":"Role alias does not exist"}`                                                                                     |
-|   ✅   |     ✅      |           ✅            |       ✅        |    ❌     |                ❌                |     400     | `{"message":"Unable to assume the role, or the role to assume does not exist"}`                                               |
-|   ✅   |     ✅      |           ✅            |       ✅        |    ✅     |                ❌                |     400     | `{"message":"The requested CredentialDurationSeconds exceeds the MaxSessionDuration set for the role"}`                       |
-|   ✅   |     ✅      |           ✅            |       ✅        |    ✅     |                ✅                |     200     | `{"credentials":{"accessKeyId":"A..4","secretAccessKey":"0..h","sessionToken":"I..Q==","expiration":"2023-02-06T05:54:46Z"}}` |
+|  ❌   |     ❌     |           ❌           |       ❌       |    ❌    |               ❌                |     403     | `{"message":"Invalid thing name passed"}`                                                                                     |
+|  ❌   |     ✅     |           ❌           |       ❌       |    ❌    |               ❌                |     403     | `{"message":"Invalid thing name passed"}`                                                                                     |
+|  ✅   |     ✅     |           ❌           |       ❌       |    ❌    |               ❌                |     403     | `{"message":"Access Denied"}`                                                                                                 |
+|  ✅   |     ✅     |           ✅           |       ❌       |    ❌    |               ❌                |     404     | `{"message":"Role alias does not exist"}`                                                                                     |
+|  ✅   |     ✅     |           ✅           |       ✅       |    ❌    |               ❌                |     400     | `{"message":"Unable to assume the role, or the role to assume does not exist"}`                                               |
+|  ✅   |     ✅     |           ✅           |       ✅       |    ✅    |               ❌                |     400     | `{"message":"The requested CredentialDurationSeconds exceeds the MaxSessionDuration set for the role"}`                       |
+|  ✅   |     ✅     |           ✅           |       ✅       |    ✅    |               ✅                |     200     | `{"credentials":{"accessKeyId":"A..4","secretAccessKey":"0..h","sessionToken":"I..Q==","expiration":"2023-02-06T05:54:46Z"}}` |
 
 ## Local building and testing
 
