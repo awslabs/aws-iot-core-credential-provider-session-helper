@@ -53,11 +53,12 @@ The [Hypermodern Python Cookiercutter](https://cookiecutter-hypermodern-python.r
 The steps are (namely for me to remember!):
 
 1. Fork and clone the repository
-2. Ensure `asdf` and `direnv` are installed
-3. Create a new local _direnv_ via `direnv allow`, normally with the most recent version of Python
-4. Install build/text tools: `pip install poetry nox nox-poetry`
-5. `poetry update && poetry install`
-6. Perform updates
-7. `nox` (will run all sessions)
+2. Enable GitHub actions prior to first commit and push
+3. Ensure `asdf` and `direnv` are installed
+4. Create a new local _direnv_ via `direnv allow`, normally with the most recent version of Python
+5. Install build/text tools: `pip install poetry nox nox-poetry`
+6. `poetry update && poetry install`
+7. Perform updates
+8. `nox` (will run all sessions)
 
 Once completed, commit the changes, verify the actions run in GitHub, then pefrom a pull request against the main repo.
