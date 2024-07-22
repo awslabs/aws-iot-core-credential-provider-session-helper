@@ -68,7 +68,8 @@ Once completed, commit the changes, verify the actions run in GitHub, then perfo
 2. Locally, clone (or update) the _main_ repository and follow the steps to install poetry and dependencies
 3. `git switch --create release main`
 4. `poetry version <version>` (bump version based on semver)
-5. git commit --message="awsiot-credentialhelper <version>" pyproject.toml`
+5. `git commit --message="awsiot-credentialhelper <version>" pyproject.toml`
 6. `git push origin release`
+7. Review results of Actions (they should still all pass), then create a pull request of this branch and merge-squash-delete.
 
-Monitor status of the _Release workflow_.
+Merging the pull requests triggers the _Release workflow_. Monitor that to ensure it has been published to PyPI.
