@@ -381,10 +381,11 @@
 <li><p>Locally, clone (or update) the <em>main</em> repository and follow the steps to install poetry and dependencies</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">switch</span> <span class="pre">--create</span> <span class="pre">release</span> <span class="pre">main</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">version</span> <span class="pre">&lt;version&gt;</span></code> (bump version based on semver)</p></li>
-<li><p>git commit –message=”awsiot-credentialhelper <version>” pyproject.toml`</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">commit</span> <span class="pre">--message=&quot;awsiot-credentialhelper</span> <span class="pre">&lt;version&gt;&quot;</span> <span class="pre">pyproject.toml</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span> <span class="pre">origin</span> <span class="pre">release</span></code></p></li>
+<li><p>Review results of Actions (they should still all pass), then create a pull request of this branch and merge-squash-delete.</p></li>
 </ol>
-<p>Monitor status of the <em>Release workflow</em>.</p>
+<p>Merging the pull requests triggers the <em>Release workflow</em>. Monitor that to ensure it has been published to PyPI.</p>
 </section>
 </section>
 
