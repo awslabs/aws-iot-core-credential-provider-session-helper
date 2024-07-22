@@ -60,5 +60,15 @@ The steps are (namely for me to remember!):
 6. `poetry update && poetry install`
 7. Perform updates
 8. `nox` (will run all sessions)
+9. Create a pull request against the main repository
 
-Once completed, commit the changes, verify the actions run in GitHub, then pefrom a pull request against the main repo.
+Once completed, commit the changes, verify the actions run in GitHub, then perform a pull request against the main repository. From the main repository, perform these steps:
+
+1. Once all tests complete successfully, squash merge the pull request from the main repository
+2. Locally, clone (or update) the _main_ repository and follow the steps to install poetry and dependencies
+3. `git switch --create release main`
+4. `poetry version <version>` (bump version based on semver)
+5. git commit --message="awsiot-credentialhelper <version>" pyproject.toml`
+6. `git push origin release`
+
+Monitor status of the _Release workflow_.
