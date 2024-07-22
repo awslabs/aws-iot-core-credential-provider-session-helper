@@ -38,13 +38,13 @@ Then for each combination of resources:
 
 | Thing | IoT Policy | IoT Policy Permissions | IoT Role Alias | IAM Role | Role Alias Duration <= IAM Role | Status Code | Response Body                                                                                                                 |
 | :---: | :--------: | :--------------------: | :------------: | :------: | :-----------------------------: | :---------: | ----------------------------------------------------------------------------------------------------------------------------- |
-|  ❌   |     ❌     |           ❌           |       ❌       |    ❌    |               ❌                |     403     | `{"message":"Invalid thing name passed"}`                                                                                     |
-|  ❌   |     ✅     |           ❌           |       ❌       |    ❌    |               ❌                |     403     | `{"message":"Invalid thing name passed"}`                                                                                     |
-|  ✅   |     ✅     |           ❌           |       ❌       |    ❌    |               ❌                |     403     | `{"message":"Access Denied"}`                                                                                                 |
-|  ✅   |     ✅     |           ✅           |       ❌       |    ❌    |               ❌                |     404     | `{"message":"Role alias does not exist"}`                                                                                     |
-|  ✅   |     ✅     |           ✅           |       ✅       |    ❌    |               ❌                |     400     | `{"message":"Unable to assume the role, or the role to assume does not exist"}`                                               |
-|  ✅   |     ✅     |           ✅           |       ✅       |    ✅    |               ❌                |     400     | `{"message":"The requested CredentialDurationSeconds exceeds the MaxSessionDuration set for the role"}`                       |
-|  ✅   |     ✅     |           ✅           |       ✅       |    ✅    |               ✅                |     200     | `{"credentials":{"accessKeyId":"A..4","secretAccessKey":"0..h","sessionToken":"I..Q==","expiration":"2023-02-06T05:54:46Z"}}` |
+|   ❌   |     ❌      |           ❌            |       ❌        |    ❌     |                ❌                |     403     | `{"message":"Invalid thing name passed"}`                                                                                     |
+|   ❌   |     ✅      |           ❌            |       ❌        |    ❌     |                ❌                |     403     | `{"message":"Invalid thing name passed"}`                                                                                     |
+|   ✅   |     ✅      |           ❌            |       ❌        |    ❌     |                ❌                |     403     | `{"message":"Access Denied"}`                                                                                                 |
+|   ✅   |     ✅      |           ✅            |       ❌        |    ❌     |                ❌                |     404     | `{"message":"Role alias does not exist"}`                                                                                     |
+|   ✅   |     ✅      |           ✅            |       ✅        |    ❌     |                ❌                |     400     | `{"message":"Unable to assume the role, or the role to assume does not exist"}`                                               |
+|   ✅   |     ✅      |           ✅            |       ✅        |    ✅     |                ❌                |     400     | `{"message":"The requested CredentialDurationSeconds exceeds the MaxSessionDuration set for the role"}`                       |
+|   ✅   |     ✅      |           ✅            |       ✅        |    ✅     |                ✅                |     200     | `{"credentials":{"accessKeyId":"A..4","secretAccessKey":"0..h","sessionToken":"I..Q==","expiration":"2023-02-06T05:54:46Z"}}` |
 
 ## Local building and testing
 
@@ -68,7 +68,8 @@ Once completed, commit the changes, verify the actions run in GitHub, then perfo
 2. Locally, clone (or update) the _main_ repository and follow the steps to install poetry and dependencies
 3. `git switch --create release main`
 4. `poetry version <version>` (bump version based on semver)
-5. git commit --message="awsiot-credentialhelper <version>" pyproject.toml`
+5. `git commit --message="awsiot-credentialhelper <version>" pyproject.toml`
 6. `git push origin release`
+7. Review results of Actions (they should still all pass), then create a pull request of this branch and merge-squash-delete.
 
-Monitor status of the _Release workflow_.
+Merging the pull requests triggers the _Release workflow_. Monitor that to ensure it has been published to PyPI.
