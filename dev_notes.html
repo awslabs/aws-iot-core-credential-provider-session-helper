@@ -5,11 +5,11 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="prev" title="License" href="license.html" />
 
-    <!-- Generated with Sphinx 7.1.2 and Furo 2024.05.06 -->
+    <!-- Generated with Sphinx 7.1.2 and Furo 2024.07.18 -->
         <title>Things of interest during development - AWS IoT Core Credential Provider Session Helper documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=387cc868" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=36a5483c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=613ab9ff" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
     
     
 
@@ -88,19 +88,6 @@
       <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
     </svg>
   </symbol>
-  <symbol id="svg-sun-half" viewBox="0 0 24 24">
-    <title>Auto light/dark mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
-      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-      <circle cx="12" cy="12" r="9" />
-      <path d="M13 12h5" />
-      <path d="M13 15h4" />
-      <path d="M13 18h1" />
-      <path d="M13 9h4" />
-      <path d="M13 6h1" />
-    </svg>
-  </symbol>
   <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
     <title>Auto light/dark, in light mode</title>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -141,7 +128,7 @@
       <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
       <path d="M13.5 6.5l4 4" />
       <path d="M20 21l2 -2l-2 -2" />
-      <path d="M17 17l-2 2l2 2" /
+      <path d="M17 17l-2 2l2 2" />
     </svg>
   </symbol>
   <symbol id="svg-eye" viewBox="0 0 24 24">
@@ -386,8 +373,18 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">update</span> <span class="pre">&amp;&amp;</span> <span class="pre">poetry</span> <span class="pre">install</span></code></p></li>
 <li><p>Perform updates</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">nox</span></code> (will run all sessions)</p></li>
+<li><p>Create a pull request against the main repository</p></li>
 </ol>
-<p>Once completed, commit the changes, verify the actions run in GitHub, then pefrom a pull request against the main repo.</p>
+<p>Once completed, commit the changes, verify the actions run in GitHub, then perform a pull request against the main repository. From the main repository, perform these steps:</p>
+<ol class="arabic simple">
+<li><p>Once all tests complete successfully, squash merge the pull request from the main repository</p></li>
+<li><p>Locally, clone (or update) the <em>main</em> repository and follow the steps to install poetry and dependencies</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">switch</span> <span class="pre">--create</span> <span class="pre">release</span> <span class="pre">main</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">version</span> <span class="pre">&lt;version&gt;</span></code> (bump version based on semver)</p></li>
+<li><p>git commit –message=”awsiot-credentialhelper <version>” pyproject.toml`</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span> <span class="pre">origin</span> <span class="pre">release</span></code></p></li>
+</ol>
+<p>Monitor status of the <em>Release workflow</em>.</p>
 </section>
 </section>
 
@@ -455,6 +452,6 @@
 </div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=4825356b"></script>
-    <script src="_static/scripts/furo.js?v=4e2eecee"></script>
+    <script src="_static/scripts/furo.js?v=5fa4622c"></script>
     </body>
 </html>
