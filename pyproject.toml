@@ -9,7 +9,7 @@ license = "Apache-2.0"
 readme = "README.md"
 homepage = "https://github.com/awslabs/aws-iot-core-credential-provider-session-helper"
 repository = "https://github.com/awslabs/aws-iot-core-credential-provider-session-helper"
-documentation = "https://aws-iot-core-credential-provider-session-helper.readthedocs.io"
+documentation = "https://awslabs.github.io/aws-iot-core-credential-provider-session-helper"
 classifiers = [
     "Development Status :: 4 - Beta",
 ]
@@ -44,7 +44,6 @@ pre-commit = ">=2.16.0"
 pre-commit-hooks = ">=4.1.0"
 pytest = ">=6.2.5"
 pyupgrade = ">=2.29.1"
-safety = ">=1.10.3"
 sphinx = ">=4.3.2"
 sphinx-autobuild = ">=2021.3.14"
 sphinx-click = ">=3.0.2"
@@ -56,6 +55,7 @@ myst-parser = {version = ">=0.16.1"}
 pytest-httpserver = "^1.0.6"
 trustme = "^0.9.0"
 coverage-conditional-plugin = "^0.8.0"
+pip-audit = "^2.7.3"
 
 [tool.coverage.paths]
 source = ["src", "*/site-packages"]
