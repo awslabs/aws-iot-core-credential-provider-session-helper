@@ -127,6 +127,8 @@ jobs:
         with:
           name: coverage-data
           pattern: coverage-data-*
+          include-hidden-files: false
+
   coverage:
     runs-on: ubuntu-latest
     needs: tests
