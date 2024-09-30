@@ -9,7 +9,7 @@ license = "Apache-2.0"
 readme = "README.md"
 homepage = "https://github.com/awslabs/aws-iot-core-credential-provider-session-helper"
 repository = "https://github.com/awslabs/aws-iot-core-credential-provider-session-helper"
-documentation = "https://aws-iot-core-credential-provider-session-helper.readthedocs.io"
+documentation = "https://awslabs.github.io/aws-iot-core-credential-provider-session-helper"
 classifiers = [
     "Development Status :: 4 - Beta",
 ]
