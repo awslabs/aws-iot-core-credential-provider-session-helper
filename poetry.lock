@@ -221,13 +221,13 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.35.29"
+version = "1.35.72"
 description = "Low-level, data-driven core of boto 3."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "botocore-1.35.29-py3-none-any.whl", hash = "sha256:f8e3ae0d84214eff3fb69cb4dc51cea6c43d3bde82027a94d00c52b941d6c3d5"},
-    {file = "botocore-1.35.29.tar.gz", hash = "sha256:4ed28ab03675bb008a290c452c5ddd7aaa5d4e3fa1912aadbdf93057ee84362b"},
+    {file = "botocore-1.35.72-py3-none-any.whl", hash = "sha256:7412877c3f766a1bfd09236e225ce1f0dc2c35e47949ae423e56e2093c8fa23a"},
+    {file = "botocore-1.35.72.tar.gz", hash = "sha256:6b5fac38ef7cfdbc7781a751e0f78833ccb9149ba815bc238b1dbb75c90fbae5"},
 ]
 
 [package.dependencies]
@@ -239,7 +239,7 @@ urllib3 = [
 ]
 
 [package.extras]
-crt = ["awscrt (==0.21.5)"]
+crt = ["awscrt (==0.22.0)"]
 
 [[package]]
 name = "cachecontrol"
