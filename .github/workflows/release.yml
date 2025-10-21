@@ -6,6 +6,9 @@ on:
       - main
       - master
 
+permissions:
+  contents: write
+
 jobs:
   release:
     name: Release
