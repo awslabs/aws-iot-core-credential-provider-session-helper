@@ -4,6 +4,8 @@
 
 **NOTE**: This repository is no longer supported or updated by GitHub. If you wish to continue to develop this code yourself, we recommend you fork it. Current published PyPI packages are still available, but are not being updated. A similar archive/deprecation notice is present there also.
 
+---
+
 [![PyPI](https://img.shields.io/pypi/v/awsiot-credentialhelper.svg)][pypi status]
 [![Status](https://img.shields.io/pypi/status/awsiot-credentialhelper.svg)][pypi status]
 [![Python Version](https://img.shields.io/pypi/pyversions/awsiot-credentialhelper)][pypi status]
